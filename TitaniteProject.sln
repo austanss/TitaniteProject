@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitaniteProject.Execution", "src\TitaniteProject.Execution\TitaniteProject.Execution.csproj", "{1912884A-9045-4AEF-8E36-9AACDD7AB7A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitaniteProject.Runner", "src\TitaniteProject.Runner\TitaniteProject.Runner.csproj", "{36A85100-64DF-4C78-960F-4F643A460484}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TitaniteProject.TestProgram", "src\TitaniteProject.TestProgram\TitaniteProject.TestProgram.shproj", "{7F7B9D22-8ECB-4F3E-A896-BD9EDF43D418}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\TitaniteProject.TestProgram\TitaniteProject.TestProgram.projitems*{36a85100-64df-4c78-960f-4f643a460484}*SharedItemsImports = 5
+		src\TitaniteProject.TestProgram\TitaniteProject.TestProgram.projitems*{7f7b9d22-8ecb-4f3e-a896-bd9edf43d418}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1912884A-9045-4AEF-8E36-9AACDD7AB7A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1912884A-9045-4AEF-8E36-9AACDD7AB7A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1912884A-9045-4AEF-8E36-9AACDD7AB7A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1912884A-9045-4AEF-8E36-9AACDD7AB7A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A85100-64DF-4C78-960F-4F643A460484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A85100-64DF-4C78-960F-4F643A460484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A85100-64DF-4C78-960F-4F643A460484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A85100-64DF-4C78-960F-4F643A460484}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEB274CB-8DE9-4C40-B0FF-817F837CCBDA}
+	EndGlobalSection
+EndGlobal
