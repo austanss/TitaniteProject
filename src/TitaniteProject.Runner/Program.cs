@@ -1,16 +1,17 @@
 ﻿using System;
 
 using TitaniteProject.Execution;
+using TitaniteProject.Execution.Contexts;
 
 namespace TitaniteProject.Runner
 {
     public class Program
     {
-        const string VERSION_LINE = "ProtoTPR One [000]";
+        const string VERSION_STRING = "ProtoTPR Two";
 
         public static void Main(string[] args)
         {
-            Console.WriteLine($"{VERSION_LINE}\n");
+            Console.WriteLine($"\t -- {VERSION_STRING} -- \n");
             
             if (args.Length > 0)
                 throw new NotImplementedException("Switches and arguments are not supported.");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace TitaniteProject.Execution
+namespace TitaniteProject.Execution.Contexts
 {
     public struct ProgramContext
     {

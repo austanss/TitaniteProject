@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TitaniteProject.Execution
+namespace TitaniteProject.Execution.Contexts
 {
     internal enum ExecutionStatus : byte
     {

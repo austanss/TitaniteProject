@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using TitaniteProject.Execution.Contexts;
+
 namespace TitaniteProject.Execution.Functions
 {
     internal class UserDefinedFunction : RuntimeFunction

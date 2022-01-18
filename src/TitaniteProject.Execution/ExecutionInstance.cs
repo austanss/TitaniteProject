@@ -1,6 +1,8 @@
 ﻿using System;
 
 using TitaniteProject.Execution.Exceptions;
+using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution
 {
@@ -17,6 +19,8 @@ namespace TitaniteProject.Execution
 
         internal VariableContext GlobalContext;
         internal VariableContext LocalContext;
+
+        internal CallStack CallStack;
 
         internal ulong Counter;
 
@@ -63,10 +67,12 @@ namespace TitaniteProject.Execution
             Instructions = GenerateInstructionMap(Instructions);
             Functions = InstallDefaultFunctions(Functions);
 
+            CallStack = new CallStack();
+
             string[] lines = Program.Content.Split('\n');
             Counter = 0;
 
-            LineProcessor processor = new LineProcessor(this);
+            InstructionParser processor = new InstructionParser(this);
 
             ExecutionStatus status = ExecutionStatus.Normal;
 

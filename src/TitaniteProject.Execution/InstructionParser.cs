@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
+using TitaniteProject.Execution.Contexts;
+
 namespace TitaniteProject.Execution
 {
-    internal class LineProcessor
+    internal class InstructionParser
     {
-        public LineProcessor(in ExecutionInstance ctx)
+        public InstructionParser(in ExecutionInstance ctx)
             => instance = ctx;
 
         private ExecutionInstance instance;
