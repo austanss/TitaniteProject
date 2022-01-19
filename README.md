@@ -27,11 +27,11 @@ These features have been implemented as of P1:
  
  - The **platform**
    - Directly-interpreted assembly (instead of bytecode)
-   - Basic execution with limited capabilities
+   - Simple execution with limited instructions
      - text output
      - variables
-     - local/global context (no call stack)
-     - basic functions (can't return to caller, glorified `jmp`)
+     - contexts/call stacks
+     - functions
      - comments
  - The **front-end**
    - Basic console app
