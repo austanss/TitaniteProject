@@ -10,7 +10,17 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            return ExecutionStatus.EndOfProgram;
+            if (ctx.CallStack.Depth == 0)
+                return ExecutionStatus.EndOfProgram;
+
+            ctx.Counter = ctx.CallStack.Current.ReturnPosition;
+            
+            foreach (string i in ctx.CallStack.Current.LocalVariableIdentifiers)
+                ctx.LocalContext.Remove(i);
+
+            ctx.CallStack.Shed();
+
+            return ExecutionStatus.Normal;
         }
     }
 }

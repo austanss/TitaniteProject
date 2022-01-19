@@ -11,7 +11,7 @@ namespace TitaniteProject.Execution
         public InstructionParser(in ExecutionInstance ctx)
             => instance = ctx;
 
-        private ExecutionInstance instance;
+        private readonly ExecutionInstance instance;
 
         public ExecutionStatus Process(string line)
         {
@@ -23,7 +23,7 @@ namespace TitaniteProject.Execution
             if (line == "")
                 return ExecutionStatus.Normal;
 
-            string opcode = line.Substring(0, 3);
+            string opcode = line[..3];
             string operand = line.Remove(0, 3).Trim();
 
             return instance.Instructions[opcode](operand);

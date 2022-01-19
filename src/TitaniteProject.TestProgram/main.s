@@ -12,10 +12,18 @@
 ; puts: conout: prints <conout> to stdout, then linefeeds
 
 fnc main:
-	dcl str.output
-	ass output="Hello, world!"
-	cpy output/output
-	sto output:conout
-	lod conout:output
+	dcl str.text1
+	ass text1="Hello, from the main function!"
+	cpy text1/text1
+	sto text1:conout
+	lod conout:text1
+	cll puts
+	cll function
+	rtn
+
+fnc function:
+	dcl str.text2
+	ass text2="Hello again, from a callee function!"
+	sto text2:conout
 	cll puts
 	rtn

@@ -8,14 +8,15 @@ namespace TitaniteProject.Execution.Functions
 {
     internal class UserDefinedFunction : RuntimeFunction
     {
-        public UserDefinedFunction(ulong line)
+        public UserDefinedFunction(string identifier, ulong line)
         {
             this.line = line;
-            List.TryAdd(line, this);
+            List.TryAdd(identifier, this);
         }
 
-        private ulong line;
-        public static Dictionary<ulong, UserDefinedFunction> List = new Dictionary<ulong, UserDefinedFunction>();
+        private readonly ulong line;
+
+        public static Dictionary<string, UserDefinedFunction> List = new Dictionary<string, UserDefinedFunction>();
 
         public override ExecutionStatus Invoke(in ExecutionInstance ctx)
         {

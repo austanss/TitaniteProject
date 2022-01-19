@@ -9,10 +9,29 @@ namespace TitaniteProject.Execution.Contexts
         public CallStack()
         {
             Depth = 0;
-            Frames = new List<CallStackFrame>();
+            Frames = new List<CallStackFrame>
+            {
+                new CallStackFrame(0)
+            };
         }
 
-        public ulong Depth;
-        List<CallStackFrame> Frames;
+        public int Depth;
+        readonly List<CallStackFrame> Frames;
+
+        public CallStackFrame this[int index]
+        {
+            get { return Frames[index]; }
+        }
+
+        public CallStackFrame Current
+        {
+            get { return Frames[Depth]; }
+        }
+
+        public void Add(CallStackFrame frame)
+            => Frames.Insert(++Depth, frame);
+
+        public void Shed()
+            => Frames.RemoveAt(--Depth);
     }
 }

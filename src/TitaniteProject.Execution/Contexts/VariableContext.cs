@@ -7,26 +7,21 @@ namespace TitaniteProject.Execution.Contexts
     internal class VariableContext
     {
         public VariableContext()
-        {
-            globals = new Dictionary<string, string>();
-        }
+            => globals = new Dictionary<string, string>();
 
         private readonly Dictionary<string, string> globals;
 
         public string this[string alias]
         {
-            get
-            {
-                return globals[alias];
-            }
+            get { return globals[alias]; }
 
-            set
-            {
-                if (globals.ContainsKey(alias))
-                    globals[alias] = value;
-                else
-                    globals.Add(alias, value);
-            }
+            set { globals[alias] = value; }
         }
+
+        public void Declare(string alias)
+            => globals.Add(alias, "null");
+
+        public void Remove(string alias)
+            => globals.Remove(alias);
     }
 }

@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using TitaniteProject.Execution.Contexts;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class CallInstruction : Instruction
+    internal class NullInstruction : Instruction
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string identifier = operand.Trim();
-
-            ctx.CallStack.Add(new CallStackFrame(ctx.Counter));
-
-            return ctx.Functions[identifier]();
+            return ExecutionStatus.Normal;
         }
     }
 }

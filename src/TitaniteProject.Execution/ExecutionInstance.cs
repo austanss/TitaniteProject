@@ -3,6 +3,8 @@
 using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
+using TitaniteProject.Execution.Preliminary;
+using TitaniteProject.Execution.Functions;
 
 namespace TitaniteProject.Execution
 {
@@ -24,16 +26,39 @@ namespace TitaniteProject.Execution
 
         internal ulong Counter;
 
-        public ExecutionInstance DefineStandardOutput(StandardOutput stdout)
-        {
-            this.Stdout = stdout;
-            return this;
-        }
+        public bool Instantiated;
 
-        public ExecutionInstance LoadProgram(ProgramContext program)
+        public ExecutionInstance(ProgramContext program, StandardOutput stdout)
         {
-            this.Program = program;
-            return this;
+            Program = program;
+            Stdout = stdout;
+
+            Instructions = new FunctionMap<string>();
+            Functions = new ParameterlessFunctionMap();
+            GlobalContext = new VariableContext();
+            LocalContext = new VariableContext();
+
+            Instructions = GenerateInstructionMap(Instructions);
+            Functions = InstallDefaultFunctions(Functions);
+
+            CallStack = new CallStack();
+
+            ulong[] functions = new FunctionSweep(program).Catalyze();
+            string[] declarations = new ArraySelection<string>(program.Content.Split('\n'), functions).Catalyze();
+
+            if (declarations.Length != functions.Length)
+                throw new ExecutionCorruptionException();
+
+            for (int i = 0; i < declarations.Length; i++)
+            {
+                string identifier = declarations[i].Replace('\r', ' ').Trim();
+                identifier = identifier[4..(identifier.Length - 1)];
+
+                new UserDefinedFunction(identifier, functions[i]);
+                Functions.Register(identifier, () => UserDefinedFunction.List[identifier].Invoke(this));
+            }
+
+            Counter = 0;
         }
 
         private FunctionMap<string> GenerateInstructionMap(in FunctionMap<string> map)
@@ -45,8 +70,8 @@ namespace TitaniteProject.Execution
             map.Register("lod", (string operand) => Instruction.Load.Execute(operand, this));
             map.Register("cpy", (string operand) => Instruction.Copy.Execute(operand, this));
             map.Register("cll", (string operand) => Instruction.Call.Execute(operand, this));
-            map.Register("fnc", (string operand) => Instruction.Function.Execute(operand, this));
             map.Register("rtn", (string operand) => Instruction.Return.Execute(operand, this));
+            map.Register("fnc", (string operand) => Instruction.Null.Execute(operand, this));
             return map;
         }
         
@@ -59,18 +84,7 @@ namespace TitaniteProject.Execution
 
         public void Run()
         {
-            Instructions = new FunctionMap<string>();
-            Functions = new ParameterlessFunctionMap();
-            GlobalContext = new VariableContext();
-            LocalContext = new VariableContext();
-
-            Instructions = GenerateInstructionMap(Instructions);
-            Functions = InstallDefaultFunctions(Functions);
-
-            CallStack = new CallStack();
-
             string[] lines = Program.Content.Split('\n');
-            Counter = 0;
 
             InstructionParser processor = new InstructionParser(this);
 

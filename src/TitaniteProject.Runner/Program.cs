@@ -5,9 +5,12 @@ using TitaniteProject.Execution.Contexts;
 
 namespace TitaniteProject.Runner
 {
-    public class Program
+    public static class Program
     {
         const string VERSION_STRING = "ProtoTPR Two";
+
+        internal static void Output(string data)
+            => Console.WriteLine(data);
 
         public static void Main(string[] args)
         {
@@ -20,10 +23,9 @@ namespace TitaniteProject.Runner
 
             Console.WriteLine($"\nLoading program \"{program.Name}\" (version {program.Version})...\n\n\n");
 
-            ExecutionInstance environment = new ExecutionInstance();
-            environment.DefineStandardOutput((conout) => Console.WriteLine(conout)).LoadProgram(program);
+            ExecutionInstance instance = new(program, (string text) => Output(text));
 
-            environment.Run();
+            instance.Run();
 
             Console.WriteLine("\n\n\n");
         }
