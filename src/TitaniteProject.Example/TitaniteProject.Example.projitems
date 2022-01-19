@@ -15,7 +15,7 @@
     <None Include="$(MSBuildThisFileDirectory)program.manifest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)runner.cfg">
+    <None Include="$(MSBuildThisFileDirectory)texi.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

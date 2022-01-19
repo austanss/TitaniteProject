@@ -11,7 +11,7 @@
 
 fnc main:
 	dcl str.text1
-	ass text1="Hello, from the main function!"
+	ass text1="main: Hello, world!"
 	cpy text1/text1
 	sto text1:stdout
 	cll function
@@ -19,6 +19,6 @@ fnc main:
 
 fnc function:
 	dcl str.text2
-	ass text2="Hello again, from a callee function!"
+	ass text2="function: Hello, world!"
 	sto text2:stdout
 	rtn

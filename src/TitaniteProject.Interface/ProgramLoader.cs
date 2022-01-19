@@ -8,7 +8,7 @@ using System.IO;
 using TitaniteProject.Execution;
 using TitaniteProject.Execution.Contexts;
 
-namespace TitaniteProject.Runner
+namespace TitaniteProject.Interface
 {
     public class ProgramLoader
     {
@@ -45,7 +45,7 @@ namespace TitaniteProject.Runner
             if (cfg == null)
                 throw new FileNotFoundException($"File \"{cfgFilePath}\" could not be loaded.");
 
-            StreamReader sr = new StreamReader(cfg);
+            StreamReader sr = new(cfg);
             string[] modifiers = sr.ReadToEnd().Split("\n");
             sr.Dispose();
             cfg.Close();
@@ -70,7 +70,7 @@ namespace TitaniteProject.Runner
             if (used)
                 throw new NotSupportedException("The caller function attempted to reference a loader instance that has been used.");
 
-            ProgramContext program = new ProgramContext();
+            ProgramContext program = new();
             StreamReader sr;
 
             FileStream code;

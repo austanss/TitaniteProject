@@ -3,11 +3,11 @@
 using TitaniteProject.Execution;
 using TitaniteProject.Execution.Contexts;
 
-namespace TitaniteProject.Runner
+namespace TitaniteProject.Interface
 {
     public static class Program
     {
-        const string VERSION_STRING = "ProtoTPR Two";
+        const string VERSION_STRING = "TExI [P2]";
 
         internal static void Output(string data)
             => Console.WriteLine(data);
@@ -15,11 +15,16 @@ namespace TitaniteProject.Runner
         public static void Main(string[] args)
         {
             Console.WriteLine($"\t -- {VERSION_STRING} -- \n");
-            
-            if (args.Length > 0)
-                throw new NotImplementedException("Switches and arguments are not supported.");
 
-            ProgramContext program = new ProgramLoader().LoadConfiguration("runner.cfg").RetrieveProgram();
+            if (args.Length > 0)
+            {
+                Console.WriteLine("NOTICE: Arguments are to be implemented in phase Alpha.\n");
+                Console.WriteLine("Usage: texi .\n");
+                Console.WriteLine("Details: The current working directory should contain a valid 'texi.config' file.");
+                return;
+            }
+
+            ProgramContext program = new ProgramLoader().LoadConfiguration("texi.config").RetrieveProgram();
 
             Console.WriteLine($"\nLoading program \"{program.Name}\" (version {program.Version})...\n\n\n");
 
