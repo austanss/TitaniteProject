@@ -13,6 +13,9 @@ namespace TitaniteProject.Execution.Instructions
             string identifier = operand.Split(':')[0];
             string alias = operand.Split(':')[1];
 
+            if (!ctx.GlobalContext.Contains(alias))
+                ctx.GlobalContext.Declare(alias);
+
             ctx.GlobalContext[alias] = ctx.LocalContext[identifier];
 
             return ExecutionStatus.Normal;

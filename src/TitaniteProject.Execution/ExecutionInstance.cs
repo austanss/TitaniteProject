@@ -4,7 +4,7 @@ using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
 using TitaniteProject.Execution.Preliminary;
-using TitaniteProject.Execution.Functions;
+using TitaniteProject.Execution.IO;
 
 namespace TitaniteProject.Execution
 {
@@ -24,6 +24,8 @@ namespace TitaniteProject.Execution
 
         internal CallStack CallStack;
 
+        internal IOManager IO;
+
         internal ulong Counter;
 
         public bool Instantiated;
@@ -39,9 +41,10 @@ namespace TitaniteProject.Execution
             LocalContext = new VariableContext();
 
             Instructions = GenerateInstructionMap(Instructions);
-            Functions = InstallDefaultFunctions(Functions);
 
             CallStack = new CallStack();
+
+            IO = new IOManager(this);
 
             ulong[] functions = new FunctionSweep(program).Catalyze();
             string[] declarations = new ArraySelection<string>(program.Content.Split('\n'), functions).Catalyze();
@@ -74,13 +77,6 @@ namespace TitaniteProject.Execution
             map.Register("fnc", (string operand) => Instruction.Null.Execute(operand, this));
             return map;
         }
-        
-        private ParameterlessFunctionMap InstallDefaultFunctions(in ParameterlessFunctionMap map)
-        {
-            map.Clear();
-            map.Register("puts", () => RuntimeFunction.PutString.Invoke(this));
-            return map;
-        }
 
         public void Run()
         {
@@ -92,6 +88,8 @@ namespace TitaniteProject.Execution
 
             while (status == ExecutionStatus.Normal)
             {
+                IO.Check();
+
                 status = processor.Process(lines[Counter]);
                 ++Counter;
             }

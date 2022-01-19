@@ -23,5 +23,8 @@ namespace TitaniteProject.Execution.Contexts
 
         public void Remove(string alias)
             => globals.Remove(alias);
+
+        public bool Contains(string alias)
+            => globals.ContainsKey(alias);
     }
 }

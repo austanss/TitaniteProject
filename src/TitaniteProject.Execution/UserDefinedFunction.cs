@@ -4,7 +4,7 @@ using System.Text;
 
 using TitaniteProject.Execution.Contexts;
 
-namespace TitaniteProject.Execution.Functions
+namespace TitaniteProject.Execution
 {
     internal class UserDefinedFunction : RuntimeFunction
     {

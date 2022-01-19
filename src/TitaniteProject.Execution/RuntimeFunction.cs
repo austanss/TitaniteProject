@@ -11,7 +11,5 @@ namespace TitaniteProject.Execution
         protected RuntimeFunction() { }
 
         public virtual ExecutionStatus Invoke(in ExecutionInstance ctx) { return ExecutionStatus.Corrupted; }
-
-        public static RuntimeFunction PutString = new Functions.PutStringFunction();
     }
 }
