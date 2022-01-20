@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <BaseOutputPath>..\..\build\TitaniteProject.Execution</BaseOutputPath>
-    <BaseIntermediateOutputPath>..\..\build\TitaniteProject.Execution\obj\</BaseIntermediateOutputPath>
+	<OutputPath>..\..\build\TitaniteProject.Execution</OutputPath>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
 
 </Project>

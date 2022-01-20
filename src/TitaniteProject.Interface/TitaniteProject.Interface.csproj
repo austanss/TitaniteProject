@@ -4,11 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <BaseOutputPath>..\..\build\TitaniteProject.Interface</BaseOutputPath>
-    <BaseIntermediateOutputPath>..\..\build\TitaniteProject.Interface\obj</BaseIntermediateOutputPath>
-    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <StartupObject>TitaniteProject.Interface.Program</StartupObject>
     <AssemblyName>texi</AssemblyName>
+	<OutputPath>..\..\build\TitaniteProject.Interface</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
