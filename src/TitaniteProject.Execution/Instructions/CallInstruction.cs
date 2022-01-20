@@ -14,6 +14,8 @@ namespace TitaniteProject.Execution.Instructions
 
             ctx.CallStack.Add(new CallStackFrame(ctx.Counter));
 
+            ctx.LocalContext = ctx.CallStack.Current.LocalVariables;
+
             return ctx.Functions[identifier]();
         }
     }

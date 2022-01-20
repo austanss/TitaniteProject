@@ -6,7 +6,7 @@ namespace TitaniteProject.Execution.Exceptions
 {
     internal class SyntaxErrorException : Exception
     {
-        public const string CODE = "TE03";
+        public const string CODE = "TE-003";
 
         public SyntaxErrorException(string message) : base(message) { }
 

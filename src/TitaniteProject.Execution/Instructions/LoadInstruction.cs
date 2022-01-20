@@ -13,7 +13,7 @@ namespace TitaniteProject.Execution.Instructions
             string alias = operand.Split(':')[0];
             string identifier = operand.Split(':')[1];
 
-            ctx.LocalContext[identifier] = ctx.GlobalContext[alias];
+            ctx.LocalContext[identifier] = ctx.ThreadContext[alias];
 
             return ExecutionStatus.Normal;
         }

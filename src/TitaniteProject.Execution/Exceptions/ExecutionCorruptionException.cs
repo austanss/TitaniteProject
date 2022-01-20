@@ -6,7 +6,7 @@ namespace TitaniteProject.Execution.Exceptions
 {
     internal class ExecutionCorruptionException : Exception
     {
-        public const string CODE = "TE02";
+        public const string CODE = "TE-002";
 
         public ExecutionCorruptionException(string message) : base(message) { }
 

@@ -1,24 +1,19 @@
-;;;;;; Instructions ;;;;;;
-; dcl: declare variable: <type>.<identifier>
-; ass: assign value: <identifier>=<value>
-; sto: store variable in global context: <identifier>:<alias>
-; lod: load variable from global context: <alias>:<identifier>
-; cpy: copy variable value to another variable: <identifier>/<identifier>
 
-; fnc: define function: <identifier>:
-; cll: call function: <identifier>
-; rtn: return to caller
+;								   ;
+; "Greetings", v2.0.0.0 | austanss ;
+;                                  ;
+
+; This file is released to the public domain. ;
 
 fnc main:
-	dcl str.text1
-	ass text1="main: Hello, world!"
-	cpy text1/text1
+	dcl text1
+	asv text1="main: Hello, world!"
 	sto text1:stdout
 	cll function
 	rtn
 
 fnc function:
-	dcl str.text2
-	ass text2="function: Hello, world!"
+	dcl text2
+	asv text2="function: Hello, world!"
 	sto text2:stdout
 	rtn

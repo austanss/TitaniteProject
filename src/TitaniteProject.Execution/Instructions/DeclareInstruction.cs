@@ -11,7 +11,7 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string identifier = UncanonicalIdentifierException.Check(operand.Split('.')[1]);
+            string identifier = UncanonicalIdentifierException.Check(operand.Trim());
 
             ctx.LocalContext.Declare(identifier);
 

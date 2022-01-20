@@ -9,17 +9,18 @@ namespace TitaniteProject.Execution.IO
         public IOManager(in ExecutionInstance instance)
         {
             ctx = instance;
-            ctx.GlobalContext.Declare("stdout");
+            ctx.ThreadContext.Declare("stdout");
+            ctx.ThreadContext["stdout"] = ulong.MaxValue;
         }
 
         private readonly ExecutionInstance ctx;
 
         public void Check()
         {
-            if (ctx.GlobalContext["stdout"] != "null")
+            if (ctx.ThreadContext["stdout"] != ulong.MaxValue)
             {
-                ctx.Stdout(ctx.GlobalContext["stdout"]);
-                ctx.GlobalContext["stdout"] = "null";
+                ctx.Stdout(ctx.Strings[(int)ctx.ThreadContext["stdout"]]);
+                ctx.ThreadContext["stdout"] = ulong.MaxValue;
             }
         }
     }

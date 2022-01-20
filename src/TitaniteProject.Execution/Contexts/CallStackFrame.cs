@@ -9,10 +9,10 @@ namespace TitaniteProject.Execution.Contexts
         public CallStackFrame(ulong returnPosition)
         {
             ReturnPosition = returnPosition;
-            LocalVariableIdentifiers = new List<string>();
+            LocalVariables = new VariableContext();
         }
 
         public ulong ReturnPosition;
-        public List<string> LocalVariableIdentifiers;
+        public VariableContext LocalVariables;
     }
 }

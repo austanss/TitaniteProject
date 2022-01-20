@@ -18,7 +18,8 @@ namespace TitaniteProject.Execution
         public static Instruction Store = new Instructions.StoreInstruction();
         public static Instruction Load = new Instructions.LoadInstruction();
 
-        public static Instruction Assign = new Instructions.AssignInstruction();
+        public static Instruction AssignString = new Instructions.AssignStringInstruction();
+        public static Instruction AssignInteger = new Instructions.AssignIntegerInstruction();
         public static Instruction Copy = new Instructions.CopyInstruction();
 
         public static Instruction Call = new Instructions.CallInstruction();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
@@ -19,10 +20,12 @@ namespace TitaniteProject.Execution
         internal FunctionMap<string> Instructions;
         internal ParameterlessFunctionMap Functions;
 
-        internal VariableContext GlobalContext;
+        internal VariableContext ThreadContext;
         internal VariableContext LocalContext;
 
         internal CallStack CallStack;
+
+        internal AllocatedCollection<string> Strings;
 
         internal IOManager IO;
 
@@ -37,12 +40,14 @@ namespace TitaniteProject.Execution
 
             Instructions = new FunctionMap<string>();
             Functions = new ParameterlessFunctionMap();
-            GlobalContext = new VariableContext();
-            LocalContext = new VariableContext();
 
             Instructions = GenerateInstructionMap(Instructions);
 
             CallStack = new CallStack();
+
+            LocalContext = CallStack.Current.LocalVariables;
+            ThreadContext = new VariableContext();
+            Strings = new AllocatedCollection<string>();
 
             IO = new IOManager(this);
 
@@ -68,7 +73,8 @@ namespace TitaniteProject.Execution
         {
             map.Clear();
             map.Register("dcl", (string operand) => Instruction.Declare.Execute(operand, this));
-            map.Register("ass", (string operand) => Instruction.Assign.Execute(operand, this));
+            map.Register("asv", (string operand) => Instruction.AssignString.Execute(operand, this));
+            map.Register("aiv", (string operand) => Instruction.AssignInteger.Execute(operand, this));
             map.Register("sto", (string operand) => Instruction.Store.Execute(operand, this));
             map.Register("lod", (string operand) => Instruction.Load.Execute(operand, this));
             map.Register("cpy", (string operand) => Instruction.Copy.Execute(operand, this));

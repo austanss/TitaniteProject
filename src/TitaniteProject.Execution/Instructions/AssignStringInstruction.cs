@@ -6,18 +6,16 @@ using TitaniteProject.Execution.Contexts;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class ReturnInstruction : Instruction
+    internal class AssignStringInstruction : Instruction
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            if (ctx.CallStack.Depth == 0)
-                return ExecutionStatus.EndOfProgram;
+            string identifier = operand.Split('=')[0];
+            string value = operand.Remove(0, identifier.Length + 1).Replace('"', ' ').Trim();
 
-            ctx.Counter = ctx.CallStack.Current.ReturnPosition;
+            ulong reference = (ulong)ctx.Strings.Add(value);
 
-            ctx.CallStack.Shed();
-
-            ctx.LocalContext = ctx.CallStack.Current.LocalVariables;
+            ctx.LocalContext[identifier] = reference;
 
             return ExecutionStatus.Normal;
         }
