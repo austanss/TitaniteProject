@@ -10,8 +10,8 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string identifier = operand.Split('-')[0].Trim();
-            ulong subtrahend = Convert.ToUInt64(operand.Split('-')[1].Trim());
+            string identifier = operand.Split(',')[0].Trim();
+            ulong subtrahend = Convert.ToUInt64(operand.Split(',')[1].Trim());
 
             ulong source = ctx.LocalContext[identifier];
 

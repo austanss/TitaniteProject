@@ -10,8 +10,8 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string identifier = operand.Split('=')[0];
-            ulong value = Convert.ToUInt64(operand.Remove(0, identifier.Length + 1).Trim());
+            string identifier = operand.Split(',')[0].Trim();
+            ulong value = Convert.ToUInt64(operand.Split(',')[1].Trim());
 
             ctx.LocalContext[identifier] = value;
 

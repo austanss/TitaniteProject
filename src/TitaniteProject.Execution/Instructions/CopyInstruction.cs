@@ -10,8 +10,8 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string source = operand.Split('/')[0];
-            string destination = operand.Split('/')[1];
+            string source = operand.Split(',')[1].Trim();
+            string destination = operand.Split(',')[0].Trim();
 
             ctx.LocalContext[destination] = ctx.LocalContext[source];
 

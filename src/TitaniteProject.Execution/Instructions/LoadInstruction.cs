@@ -10,8 +10,8 @@ namespace TitaniteProject.Execution.Instructions
     {
         public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
         {
-            string alias = operand.Split(':')[0];
-            string identifier = operand.Split(':')[1];
+            string alias = operand.Split(',')[1].Trim();
+            string identifier = operand.Split(',')[0].Trim();
 
             ctx.LocalContext[identifier] = ctx.ThreadContext[alias];
 
