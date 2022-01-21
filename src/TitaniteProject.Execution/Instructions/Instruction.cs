@@ -4,7 +4,7 @@ using System.Text;
 
 using TitaniteProject.Execution.Contexts;
 
-namespace TitaniteProject.Execution
+namespace TitaniteProject.Execution.Instructions
 {
     internal class Instruction
     {
@@ -24,5 +24,10 @@ namespace TitaniteProject.Execution
 
         public static Instruction Call = new Instructions.CallInstruction();
         public static Instruction Return = new Instructions.ReturnInstruction();
+
+        public static Instruction Add = new Instructions.AdditionInstruction();
+        public static Instruction Substract = new Instructions.SubstractionInstruction();
+        public static Instruction Multiply = new Instructions.MultiplicationInstruction();
+        public static Instruction Divide = new Instructions.DivisionInstruction();
     }
 }

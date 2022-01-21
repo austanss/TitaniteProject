@@ -5,6 +5,7 @@ using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
 using TitaniteProject.Execution.Preliminary;
+using TitaniteProject.Execution.Instructions;
 using TitaniteProject.Execution.IO;
 
 namespace TitaniteProject.Execution
@@ -81,6 +82,10 @@ namespace TitaniteProject.Execution
             map.Register("cll", (string operand) => Instruction.Call.Execute(operand, this));
             map.Register("rtn", (string operand) => Instruction.Return.Execute(operand, this));
             map.Register("fnc", (string operand) => Instruction.Null.Execute(operand, this));
+            map.Register("add", (string operand) => Instruction.Add.Execute(operand, this));
+            map.Register("sub", (string operand) => Instruction.Substract.Execute(operand, this));
+            map.Register("mul", (string operand) => Instruction.Multiply.Execute(operand, this));
+            map.Register("div", (string operand) => Instruction.Divide.Execute(operand, this));
             return map;
         }
 
