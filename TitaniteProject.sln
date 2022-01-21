@@ -9,8 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitaniteProject.Interface",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TitaniteProject.Example", "src\TitaniteProject.Example\TitaniteProject.Example.shproj", "{7F7B9D22-8ECB-4F3E-A896-BD9EDF43D418}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitaniteProject.Toolchain", "src\TitaniteProject.Toolchain\TitaniteProject.Toolchain.csproj", "{3006475A-4DE8-422A-B63C-463753220AF9}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{3006475a-4de8-422a-b63c-463753220af9}*SharedItemsImports = 5
 		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{36a85100-64df-4c78-960f-4f643a460484}*SharedItemsImports = 5
 		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{7f7b9d22-8ecb-4f3e-a896-bd9edf43d418}*SharedItemsImports = 13
 	EndGlobalSection
@@ -27,6 +30,10 @@ Global
 		{36A85100-64DF-4C78-960F-4F643A460484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36A85100-64DF-4C78-960F-4F643A460484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36A85100-64DF-4C78-960F-4F643A460484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3006475A-4DE8-422A-B63C-463753220AF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3006475A-4DE8-422A-B63C-463753220AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3006475A-4DE8-422A-B63C-463753220AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3006475A-4DE8-422A-B63C-463753220AF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,7 +7,7 @@ namespace TitaniteProject.Interface
 {
     public static class Program
     {
-        const string VERSION_STRING = "TExI [P2]";
+        const string VERSION_STRING = "TExI [P3]";
 
         internal static void Output(string data)
             => Console.WriteLine(data);
