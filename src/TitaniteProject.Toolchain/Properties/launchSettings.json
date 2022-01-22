@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TitaniteProject.Toolchain": {
+      "commandName": "Project",
+      "commandLineArgs": "-s main.s -m program.manifest -o Win:Greetings"
+    }
+  }
+}

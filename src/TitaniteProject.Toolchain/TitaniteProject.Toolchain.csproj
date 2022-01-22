@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <OutputPath>..\..\build\TitaniteProject.Toolchain</OutputPath>
+	  <AssemblyName>tacc</AssemblyName>
+	  <PackageId>TitaniteProject.Toolchain</PackageId>
+	  <StartupObject>TitaniteProject.Toolchain.Interface.Program</StartupObject>
   </PropertyGroup>
 
   <Import Project="..\TitaniteProject.Example\TitaniteProject.Example.projitems" Label="Shared" />
