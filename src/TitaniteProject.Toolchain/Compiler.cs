@@ -23,7 +23,7 @@ namespace TitaniteProject.Toolchain
         public void Compile()
         {
             if (assembly == null || manifest == null)
-                throw new CompilationInitiationException();
+                ToolchainError.TC0001.Throw();
 
             Console.WriteLine("\n\nNo assembly was generated.\n\n");
         }
