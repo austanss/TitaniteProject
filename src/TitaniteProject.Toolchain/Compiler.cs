@@ -10,7 +10,7 @@ internal class Compiler
 
     public void Compile()
     {
-        if (ctx.Data is null || ctx.Manifest is null)
+        if (ctx.Data is null || ctx.Data.Manifest is null)
         {
             ToolchainError.TC0000.Throw(null);
             throw new Exception();

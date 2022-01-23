@@ -26,6 +26,9 @@ internal class FinalizedTiPackageAssembly
         finalizer.Write(header.CodeOffset);
         finalizer.Write(header.SymbolTableOffset);
         finalizer.Write(header.StringTableOffset);
+        finalizer.Write(header.ProgramManifestOffset);
+
+        _ = finalizer.Seek((int)header.CodeOffset, SeekOrigin.Begin);
 
         foreach (TranslatedInstruction instruction in code)
         {
@@ -34,17 +37,25 @@ internal class FinalizedTiPackageAssembly
                 finalizer.Write(operand);
         }
 
+        _ = finalizer.Seek((int)header.SymbolTableOffset, SeekOrigin.Begin);
+
         foreach (TiPackageSymbol symbol in symbols)
         {
             finalizer.Write(symbol.Identifier);
             finalizer.Write(symbol.FileOffset);
         }
 
+        _ = finalizer.Seek((int)header.StringTableOffset, SeekOrigin.Begin);
+
         foreach (TiPackageString @string in strings)
         {
             finalizer.Write(@string.Value);
             finalizer.Write(@string.Index);
         }
+
+        _ = finalizer.Seek((int)header.ProgramManifestOffset, SeekOrigin.Begin);
+
+        finalizer.Write(assembly.Manifest.Content);
 
         finalizer.Flush();
     }
@@ -112,20 +123,23 @@ internal class FinalizedTiPackageAssembly
         foreach (TranslatedInstruction instruction in instructions)
             offset += sizeof(byte) + ((ulong)instruction.Operands.Length * sizeof(ulong));
 
-        ulong symbolsOffset = offset;
+        ulong symbolsOffset = 8 * (offset / 8 + 1);
 
         foreach (TiPackageSymbol symbol in symbols)
             offset += sizeof(int) + (ulong)symbol.Identifier.Length + sizeof(ulong);
 
-        ulong stringsOffset = offset;
+        ulong stringsOffset = 8 * (offset / 8 + 1);
 
         foreach (TiPackageString @string in strings)
             offset += sizeof(int) + (ulong)@string.Value.Length + sizeof(ulong);
 
+        ulong manifestOffset = 8 * (offset / 8 + 1);
+
         TiPackageHeader header = new()
         {
             SymbolTableOffset = symbolsOffset,
-            StringTableOffset = stringsOffset
+            StringTableOffset = stringsOffset,
+            ProgramManifestOffset = manifestOffset
         };
 
         return header;

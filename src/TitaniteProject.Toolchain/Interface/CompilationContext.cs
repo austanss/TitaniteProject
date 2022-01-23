@@ -8,6 +8,7 @@ internal class CompilationContext
     {
         List<SourceFile> sources = new();
         AssemblyFormat format = AssemblyFormat.Dll;
+        ProgramManifest? manifest = null;
         string? output = null;
 
         for (int i = 0; i < args.Length; i++)
@@ -32,7 +33,7 @@ internal class CompilationContext
             }
 
             if (args[i].Trim() == "-m")
-                Manifest = new(args[i + 1]);
+                manifest = new(args[i + 1]);
 
             if (args[i].Trim() == "-o")
             {
@@ -43,6 +44,7 @@ internal class CompilationContext
                     "Win" => AssemblyFormat.Pe,
                     "Linux" => AssemblyFormat.Elf,
                     "Dll" => AssemblyFormat.Dll,
+                    "Package" => AssemblyFormat.TiPackage,
                     _ => AssemblyFormat.Object
                 };
 
@@ -53,8 +55,8 @@ internal class CompilationContext
                 DisableFinalization = true;
         }
 
-        if (Manifest == null)
-            Manifest = new(null);
+        if (manifest == null)
+            manifest = new(null);
 
         Sources = sources.ToArray();
 
@@ -65,15 +67,14 @@ internal class CompilationContext
         if (format != AssemblyFormat.TiPackage)
             Console.WriteLine("NOTICE: Specified format was overridden to Package.\n");
 
-        output = Sources[0].FileName[..^2] + ".tpk";
+        output = string.Join("", output.Split('.')[..^0]) + ".tpk";
         format = AssemblyFormat.TiPackage;
 #endif
 
-        Data = new(output, format, Sources);
+        Data = new(output, format, Sources, manifest);
     }
 
     public SourceFile[] Sources;
-    public ProgramManifest Manifest;
     public UnfinalizedAssembly Data;
 
     public bool DisableFinalization = false;
