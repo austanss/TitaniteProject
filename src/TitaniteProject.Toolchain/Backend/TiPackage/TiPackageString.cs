@@ -1,9 +1,9 @@
 ﻿
-namespace TitaniteProject.Toolchain.Backend;
+namespace TitaniteProject.Toolchain.Backend.TiPackage;
 
-internal record struct TabledString
+internal record struct TiPackageString
 {
-    public TabledString(ulong index, string value)
+    public TiPackageString(ulong index, string value)
     {
         Index = index;
         Value = value;
@@ -12,7 +12,7 @@ internal record struct TabledString
     public ulong Index { get; init; }
     public string Value { get; init; }
 
-    public bool Equals(TabledString other)
+    public bool Equals(TiPackageString other)
     {
         return Value == other.Value;
     }

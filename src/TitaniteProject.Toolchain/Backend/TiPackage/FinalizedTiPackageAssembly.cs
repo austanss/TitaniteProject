@@ -1,9 +1,9 @@
 ﻿
-namespace TitaniteProject.Toolchain.Backend;
+namespace TitaniteProject.Toolchain.Backend.TiPackage;
 
-internal class FinalizedAssembly
+internal class FinalizedTiPackageAssembly
 {
-    public FinalizedAssembly(UnfinalizedAssembly assembly)
+    public FinalizedTiPackageAssembly(UnfinalizedAssembly assembly)
     {
         Data = new();
         FileName = assembly.Name;
@@ -14,11 +14,11 @@ internal class FinalizedAssembly
     {
         ulong[] codeOffsets = CalculateCodeOffsets(assembly);
 
-        TabledString[] strings = IntegrateStringTables(assembly, out int[] stringOffsets);
-        Symbol[] symbols = IntegrateSymbolTables(assembly, codeOffsets, out int[] symbolOffsets);
+        TiPackageString[] strings = IntegrateStringTables(assembly, out int[] stringOffsets);
+        TiPackageSymbol[] symbols = IntegrateSymbolTables(assembly, codeOffsets, out int[] symbolOffsets);
         TranslatedInstruction[] code = IntegrateCode(assembly, symbolOffsets, stringOffsets);
 
-        ObjectHeader header = GenerateHeader(code, symbols, strings);
+        TiPackageHeader header = GenerateHeader(code, symbols, strings);
 
         BinaryWriter finalizer = new(Data);
 
@@ -34,13 +34,13 @@ internal class FinalizedAssembly
                 finalizer.Write(operand);
         }
 
-        foreach (Symbol symbol in symbols)
+        foreach (TiPackageSymbol symbol in symbols)
         {
             finalizer.Write(symbol.Identifier);
             finalizer.Write(symbol.FileOffset);
         }
 
-        foreach (TabledString @string in strings)
+        foreach (TiPackageString @string in strings)
         {
             finalizer.Write(@string.Value);
             finalizer.Write(@string.Index);
@@ -49,33 +49,33 @@ internal class FinalizedAssembly
         finalizer.Flush();
     }
 
-    private TabledString[] IntegrateStringTables(UnfinalizedAssembly assembly, out int[] offsets)
+    private TiPackageString[] IntegrateStringTables(UnfinalizedAssembly assembly, out int[] offsets)
     {
         offsets = new int[assembly.Objects.Length];
 
-        List<TabledString> table = new();
+        List<TiPackageString> table = new();
 
         foreach ((ParsedSource @object, int i) in assembly.Objects.WithIndex())
         {
             offsets[i] = table.Count;
-            foreach (TabledString @string in @object.Strings)
-                table.Add(new TabledString((ulong)(^1).Value, @string.Value));
+            foreach (TiPackageString @string in @object.Strings)
+                table.Add(new TiPackageString((ulong)(^1).Value, @string.Value));
         }
 
         return table.ToArray();
     }
 
-    private Symbol[] IntegrateSymbolTables(UnfinalizedAssembly assembly, ulong[] codeOffsets, out int[] offsets)
+    private TiPackageSymbol[] IntegrateSymbolTables(UnfinalizedAssembly assembly, ulong[] codeOffsets, out int[] offsets)
     {
         offsets = new int[assembly.Objects.Length];
 
-        List<Symbol> table = new();
+        List<TiPackageSymbol> table = new();
 
         foreach ((ParsedSource @object, int i) in assembly.Objects.WithIndex())
         {
             offsets[i] = table.Count;
-            foreach (Symbol @symbol in @object.Symbols)
-                table.Add(new Symbol(symbol.Identifier, codeOffsets[i] + symbol.FileOffset));
+            foreach (TiPackageSymbol @symbol in @object.Symbols)
+                table.Add(new TiPackageSymbol(symbol.Identifier, codeOffsets[i] + symbol.FileOffset));
         }
 
         return table.ToArray();
@@ -105,7 +105,7 @@ internal class FinalizedAssembly
         return code.ToArray();
     }
 
-    private ObjectHeader GenerateHeader(TranslatedInstruction[] instructions, Symbol[] symbols, TabledString[] strings)
+    private TiPackageHeader GenerateHeader(TranslatedInstruction[] instructions, TiPackageSymbol[] symbols, TiPackageString[] strings)
     {
         ulong offset = BackendData.PACKAGE_HEADER_SIZE;
 
@@ -114,15 +114,15 @@ internal class FinalizedAssembly
 
         ulong symbolsOffset = offset;
 
-        foreach (Symbol symbol in symbols)
+        foreach (TiPackageSymbol symbol in symbols)
             offset += sizeof(int) + (ulong)symbol.Identifier.Length + sizeof(ulong);
 
         ulong stringsOffset = offset;
 
-        foreach (TabledString @string in strings)
+        foreach (TiPackageString @string in strings)
             offset += sizeof(int) + (ulong)@string.Value.Length + sizeof(ulong);
 
-        ObjectHeader header = new()
+        TiPackageHeader header = new()
         {
             SymbolTableOffset = symbolsOffset,
             StringTableOffset = stringsOffset

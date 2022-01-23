@@ -62,11 +62,11 @@ internal class CompilationContext
             output = Sources[0].FileName + ".dll";
 
 #if TPK_ONLY
-        if (format != AssemblyFormat.Package)
+        if (format != AssemblyFormat.TiPackage)
             Console.WriteLine("NOTICE: Specified format was overridden to Package.\n");
 
         output = Sources[0].FileName[..^2] + ".tpk";
-        format = AssemblyFormat.Package;
+        format = AssemblyFormat.TiPackage;
 #endif
 
         Data = new(output, format, Sources);

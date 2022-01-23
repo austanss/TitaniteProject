@@ -1,9 +1,9 @@
 ﻿
-namespace TitaniteProject.Toolchain.Backend;
+namespace TitaniteProject.Toolchain.Backend.TiPackage;
 
-internal record struct Symbol
+internal record struct TiPackageSymbol
 {
-    public Symbol(string identifier, ulong offset)
+    public TiPackageSymbol(string identifier, ulong offset)
     {
         Identifier = identifier;
         FileOffset = offset;
@@ -12,7 +12,7 @@ internal record struct Symbol
     public string Identifier { get; init; }
     public ulong FileOffset { get; init; }
 
-    public bool Equals(Symbol other)
+    public bool Equals(TiPackageSymbol other)
     {
         return Identifier == other.Identifier;
     }

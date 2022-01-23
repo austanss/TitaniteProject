@@ -1,7 +1,7 @@
 ﻿
-namespace TitaniteProject.Toolchain.Backend;
+namespace TitaniteProject.Toolchain.Backend.TiPackage;
 
-internal record struct ObjectHeader
+internal record struct TiPackageHeader
 {
     public ulong Magic => BackendData.PACKAGE_HEADER_MAGIC;
     public ulong CodeOffset => BackendData.PACKAGE_HEADER_SIZE;

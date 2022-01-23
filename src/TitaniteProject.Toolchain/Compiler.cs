@@ -39,7 +39,7 @@ internal class Compiler
             return;
         }
 
-        FinalizedAssembly assembly = new(ctx.Data);
+        FinalizedTiPackageAssembly assembly = new(ctx.Data);
 
         FileStream output = File.OpenWrite(assembly.FileName);
 
