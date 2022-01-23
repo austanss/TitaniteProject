@@ -7,7 +7,7 @@ internal static class AssemblerData
     {
         { "dcl", (byte)InstructionOpcode.Declare },
         { "aiv", (byte)InstructionOpcode.Assign },
-        { "asv", (byte)InstructionOpcode.Assign },
+        { "asv", (byte)InstructionOpcode.String },
         { "sto", (byte)InstructionOpcode.Store },
         { "lod", (byte)InstructionOpcode.Load },
         { "cpy", (byte)InstructionOpcode.Copy },

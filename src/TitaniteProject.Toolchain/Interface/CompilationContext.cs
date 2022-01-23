@@ -46,11 +46,11 @@ internal class CompilationContext
                     _ => AssemblyFormat.Object
                 };
 
-                if (format == AssemblyFormat.Object)
-                    output = specifier;
-                else
-                    output = args[i + 1].Split(':')[1];
+                output = format == AssemblyFormat.Object ? specifier : args[i + 1].Split(':')[1];
             }
+
+            if (args[i].Trim() == "--disable-finalization")
+                DisableFinalization = true;
         }
 
         if (Manifest == null)
@@ -65,15 +65,17 @@ internal class CompilationContext
         if (format != AssemblyFormat.Package)
             Console.WriteLine("NOTICE: Specified format was overridden to Package.\n");
 
-        output = Sources[0].FileName + ".tpk";
+        output = Sources[0].FileName[..^2] + ".tpk";
         format = AssemblyFormat.Package;
 #endif
 
-        Output = new(output, format, Sources);
+        Data = new(output, format, Sources);
     }
 
     public SourceFile[] Sources;
     public ProgramManifest Manifest;
-    public UnfinalizedAssembly Output;
+    public UnfinalizedAssembly Data;
+
+    public bool DisableFinalization = false;
 
 }

@@ -2,10 +2,11 @@
 global using System.IO;
 global using System.Linq;
 
-global using TitaniteProject.Toolchain.Exceptions;
-global using TitaniteProject.Toolchain.Backend;
-global using TitaniteProject.Toolchain.Frontends.Assembly;
 global using TitaniteProject.Toolchain.Interface;
+global using TitaniteProject.Toolchain.Exceptions;
+global using TitaniteProject.Toolchain.Frontends;
+global using TitaniteProject.Toolchain.Frontends.Assembly;
+global using TitaniteProject.Toolchain.Backend;
 
 namespace TitaniteProject.Toolchain.Interface;
 

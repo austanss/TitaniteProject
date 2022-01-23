@@ -9,6 +9,7 @@
 	  <AssemblyName>tacc</AssemblyName>
 	  <PackageId>TitaniteProject.Toolchain</PackageId>
 	  <StartupObject>TitaniteProject.Toolchain.Interface.Program</StartupObject>
+	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <Import Project="..\TitaniteProject.Example\TitaniteProject.Example.projitems" Label="Shared" />

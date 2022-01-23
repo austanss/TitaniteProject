@@ -1,8 +1,9 @@
 ﻿
 namespace TitaniteProject.Toolchain.Frontends.Assembly;
 
-internal record class ParsedAssemblySource
+internal record class ParsedAssemblySource : ParsedSource
 {
+
     public ParsedAssemblySource(SourceFile source)
     {
         List<TranslatedInstruction> instructions = new();
@@ -33,21 +34,19 @@ internal record class ParsedAssemblySource
 
             string mnemonic = instruction.Split(' ')[0];
 
-            instruction = instruction.Remove(0, 3);
-
             if (mnemonic == AssemblerData.FUNCTION_MNEMONIC)
             {
-                symbols.Add(new(instruction.Remove(0, 4).Trim(), offset));
+                symbols.Add(new(instruction.Remove(0, 4).Trim()[..^1], offset));
                 continue;
             }
 
             string[] parameters = new string[2]; 
 
-            parameters[0] = instruction.Trim().Split(',')[0];
+            parameters[0] = instruction.Remove(0, 3).Trim().Split(',')[0];
 
             try
             {
-                parameters[1] = instruction.Trim().Remove(0, parameters[0].Length + 1).Trim();
+                parameters[1] = instruction.Trim().Remove(0, 4 + parameters[0].Length + 1).Trim();
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -67,12 +66,17 @@ internal record class ParsedAssemblySource
 
             foreach ((string parameter, int i) in parameters.WithIndex())
             {
-                if (parameter == AssemblerData.NULL_PARAMETER) operands[i] = 0;
+                if (opcode == (byte)InstructionOpcode.Call)
+                {
+                    operands[0] = (ulong)symbols.IndexOf(new Symbol(parameter, 0));
+                }
+                else if (parameter == AssemblerData.NULL_PARAMETER) operands[i] = 0;
                 else if (!ulong.TryParse(parameter, out _))
                 {
                     if (strings.Contains(new TabledString(0, parameter)))
                         operands[i] = strings[strings.IndexOf(new TabledString(0, parameter))].Index;
-                    else {
+                    else
+                    {
                         strings.Add(new((ulong)strings.Count, parameter));
                         operands[i] = strings[^1].Index;
                     }
@@ -111,7 +115,7 @@ internal record class ParsedAssemblySource
         return header;
     }
 
-    public TranslatedInstruction[] Instructions;
-    public Symbol[] Symbols;
-    public TabledString[] Strings;
+    public override TranslatedInstruction[] Instructions { get; protected set; }
+    public override Symbol[] Symbols { get; protected set; }
+    public override TabledString[] Strings { get; protected set; }
 }

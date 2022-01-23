@@ -11,4 +11,14 @@ internal record struct Symbol
 
     public string Identifier { get; init; }
     public ulong FileOffset { get; init; }
+
+    public bool Equals(Symbol other)
+    {
+        return Identifier == other.Identifier;
+    }
+
+    public override int GetHashCode()
+    {
+        return Identifier.Length ^ (int)FileOffset;
+    }
 }

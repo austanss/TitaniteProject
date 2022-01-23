@@ -4,39 +4,51 @@ namespace TitaniteProject.Toolchain;
 internal class Compiler
 {
     public Compiler(CompilationContext context)
-    {
-        assembly = context.Output;
-        manifest = context.Manifest;
-    }
+        => ctx = context;
 
-    readonly UnfinalizedAssembly assembly;
-    readonly ProgramManifest manifest;
+    readonly CompilationContext ctx;
 
     public void Compile()
     {
-        if (assembly is null || manifest is null)
+        if (ctx.Data is null || ctx.Manifest is null)
         {
             ToolchainError.TC0000.Throw(null);
             throw new Exception();
         }
 
-        Array.Resize(ref assembly.Objects, assembly.Sources.Length);
+        Array.Resize(ref ctx.Data.Objects, ctx.Data.Sources.Length);
 
-        foreach ((SourceFile source, int i) in assembly.Sources.WithIndex())
+        foreach ((SourceFile source, int i) in ctx.Data.Sources.WithIndex())
         {
-            assembly.Objects[i] = source.Language switch
+            ctx.Data.Objects[i] = source.Language switch
             {
-                SourceLanguage.Assembly => new AssembledObject($"OBJ{i}", source).Object,
-                _ => new ObjectFile("null")
+                SourceLanguage.Assembly => new ParsedAssemblySource(source),
+                _ => null
             };
 
-            if (assembly.Objects[i].Identifier == "null")
+            if (ctx.Data.Objects[i] is null)
             {
                 ToolchainError.TC0002.Throw(source.FileName);
                 throw new Exception();
             }
         }
 
-        Console.WriteLine("\n\nNo assembly was generated.\n\n");
+        if (ctx.DisableFinalization)
+        {
+            Console.WriteLine("\n\nAssembly finalization disabled: no assembly was generated.\n\n");
+            return;
+        }
+
+        FinalizedAssembly assembly = new(ctx.Data);
+
+        FileStream output = File.OpenWrite(assembly.FileName);
+
+        _ = assembly.Data.Seek(0, SeekOrigin.Begin);
+        assembly.Data.CopyTo(output);
+
+        output.Flush();
+
+        output.Dispose();
+        assembly.Data.Dispose();
     }
 }

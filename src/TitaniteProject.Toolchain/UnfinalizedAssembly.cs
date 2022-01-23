@@ -8,11 +8,11 @@ internal class UnfinalizedAssembly
         Name = name;
         Format = format;
         Sources = sources;
-        Objects = Array.Empty<ObjectFile>();
+        Objects = Array.Empty<ParsedSource?>();
     }
 
     public readonly string Name;
     public readonly AssemblyFormat Format;
     public readonly SourceFile[] Sources;
-    public ObjectFile[] Objects;
+    public ParsedSource?[] Objects;
 }
