@@ -100,16 +100,21 @@ internal class FinalizedTiPackageAssembly
         {
             foreach (TranslatedInstruction @instruction in @object.Instructions)
             {
+                byte opcode = instruction.Opcode;
                 ulong[] operands = new ulong[2];
+
                 Array.Copy(instruction.Operands, operands, 2);
 
-                if (instruction.Opcode == (byte)InstructionOpcode.Call)
+                if (opcode == (byte)InstructionOpcode.Call)
                     operands[0] = operands[0] + (ulong)symbolOffsets[i];
 
-                if (instruction.Opcode == (byte)InstructionOpcode.String)
+                if (opcode == (byte)InstructionOpcode.String)
+                {
+                    opcode = (byte)InstructionOpcode.Assign;
                     operands[1] = operands[1] + (ulong)stringOffsets[i];
+                }
 
-                code.Add(new TranslatedInstruction(instruction.Opcode, operands));
+                code.Add(new TranslatedInstruction(opcode, operands));
             }
         }
 
