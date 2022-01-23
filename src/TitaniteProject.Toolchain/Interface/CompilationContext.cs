@@ -1,76 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#define TPK_ONLY
 
-namespace TitaniteProject.Toolchain.Interface
+namespace TitaniteProject.Toolchain.Interface;
+
+internal class CompilationContext
 {
-    internal class CompilationContext
+    public CompilationContext(string[] args)
     {
-        public CompilationContext(string[] args)
+        List<SourceFile> sources = new();
+        AssemblyFormat format = AssemblyFormat.Dll;
+        string? output = null;
+
+        for (int i = 0; i < args.Length; i++)
         {
-            List<SourceFile> sources = new();
-            AssemblyFormat format = AssemblyFormat.Dll;
-            string? output = null;
-
-            for (int i = 0; i < args.Length; i++)
+            if (args[i].Trim() == "-s")
             {
-                if (args[i].Trim() == "-s")
+                string[] files = args[i + 1].Split(',');
+
+                foreach (string file in files)
                 {
-                    string[] files = args[i + 1].Split(',');
+                    string extension = file.Split('.')[^1];
 
-                    foreach (string file in files)
+                    SourceLanguage language = extension switch
                     {
-                        string extension = file.Split('.')[^1];
-
-                        SourceLanguage language = extension switch
-                        {
-                            ".s" => SourceLanguage.Assembly,
-                            ".ti" => SourceLanguage.Ti,
-                            _ => SourceLanguage.Undetected,
-                        };
-
-                        sources.Add(new(file, language));
-                    }
-                }
-
-                if (args[i].Trim() == "-m")
-                    Manifest = new(args[i + 1]);
-
-                if (args[i].Trim() == "-o")
-                {
-                    string specifier = args[i + 1].Split(':')[0];
-
-                    format = specifier switch
-                    {
-                        "Win" => AssemblyFormat.Pe,
-                        "Linux" => AssemblyFormat.Elf,
-                        "Dll" => AssemblyFormat.Dll,
-                        _ => AssemblyFormat.Object
+                        "s" => SourceLanguage.Assembly,
+                        "ti" => SourceLanguage.Ti,
+                        _ => SourceLanguage.Undetected,
                     };
 
-                    if (format == AssemblyFormat.Object)
-                        output = specifier;
-                    else
-                        output = args[i + 1].Split(':')[1];
+                    sources.Add(new(file, language));
                 }
             }
 
-            if (Manifest == null)
-                Manifest = new(null);
+            if (args[i].Trim() == "-m")
+                Manifest = new(args[i + 1]);
 
-            Sources = sources.ToArray();
+            if (args[i].Trim() == "-o")
+            {
+                string specifier = args[i + 1].Split(':')[0];
 
-            if (output == null)
-                output = Sources[0].FileName + ".dll";
+                format = specifier switch
+                {
+                    "Win" => AssemblyFormat.Pe,
+                    "Linux" => AssemblyFormat.Elf,
+                    "Dll" => AssemblyFormat.Dll,
+                    _ => AssemblyFormat.Object
+                };
 
-            Output = new(output, format, Sources);
+                if (format == AssemblyFormat.Object)
+                    output = specifier;
+                else
+                    output = args[i + 1].Split(':')[1];
+            }
         }
 
-        public SourceFile[] Sources;
-        public ProgramManifest Manifest;
-        public OutputAssembly Output;
+        if (Manifest == null)
+            Manifest = new(null);
 
+        Sources = sources.ToArray();
+
+        if (output == null)
+            output = Sources[0].FileName + ".dll";
+
+#if TPK_ONLY
+        if (format != AssemblyFormat.Package)
+            Console.WriteLine("NOTICE: Specified format was overridden to Package.\n");
+
+        output = Sources[0].FileName + ".tpk";
+        format = AssemblyFormat.Package;
+#endif
+
+        Output = new(output, format, Sources);
     }
+
+    public SourceFile[] Sources;
+    public ProgramManifest Manifest;
+    public OutputAssembly Output;
+
 }

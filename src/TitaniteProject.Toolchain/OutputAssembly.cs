@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace TitaniteProject.Toolchain;
 
-namespace TitaniteProject.Toolchain
+internal class OutputAssembly
 {
-    internal class OutputAssembly
+    public OutputAssembly(string name, AssemblyFormat format, SourceFile[] sources)
     {
-        public OutputAssembly(string name, AssemblyFormat format, SourceFile[] sources)
-        {
-            Name = name;
-            Format = format;
-            Sources = sources;
-        }
-
-        public readonly string Name;
-        public readonly AssemblyFormat Format;
-        public readonly SourceFile[] Sources;
+        Name = name;
+        Format = format;
+        Sources = sources;
+        Objects = Array.Empty<ObjectFile>();
     }
+
+    public readonly string Name;
+    public readonly AssemblyFormat Format;
+    public readonly SourceFile[] Sources;
+    public ObjectFile[] Objects;
 }

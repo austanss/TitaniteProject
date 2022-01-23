@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace TitaniteProject.Toolchain;
 
-namespace TitaniteProject.Toolchain
+internal enum AssemblyFormat : byte
 {
-    internal enum AssemblyFormat : byte
-    {
-        Object = 000,
-        Dll = 001,
-        Elf = 002,
-        Pe = 003
-    }
+    Object = 000,
+    Package = 001,
+    Dll = 002,
+    Elf = 003,
+    Pe = 004
 }

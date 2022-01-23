@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace TitaniteProject.Toolchain;
 
-namespace TitaniteProject.Toolchain
+internal class SourceFile
 {
-    internal class SourceFile
+    public SourceFile(string filename, SourceLanguage language)
     {
-        public SourceFile(string filename, SourceLanguage language)
-        {
-            FileName = filename;
-            Language = language;
-        }
-
-        public readonly string FileName;
-        public readonly SourceLanguage Language;
+        FileName = filename;
+        Language = language;
+        Stream = File.OpenRead(filename);
     }
+
+    public readonly string FileName;
+    public readonly SourceLanguage Language;
+    public readonly FileStream Stream;
 }

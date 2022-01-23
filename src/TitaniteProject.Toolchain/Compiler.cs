@@ -1,31 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace TitaniteProject.Toolchain;
 
-using TitaniteProject.Toolchain.Interface;
-using TitaniteProject.Toolchain.Exceptions;
-
-namespace TitaniteProject.Toolchain
+internal class Compiler
 {
-    internal class Compiler
+    public Compiler(CompilationContext context)
     {
-        public Compiler(CompilationContext context)
+        assembly = context.Output;
+        manifest = context.Manifest;
+    }
+
+    readonly OutputAssembly assembly;
+    readonly ProgramManifest manifest;
+
+    public void Compile()
+    {
+        if (assembly is null || manifest is null)
         {
-            assembly = context.Output;
-            manifest = context.Manifest;
+            ToolchainError.TC0000.Throw(null);
+            throw new Exception();
         }
 
-        readonly OutputAssembly assembly;
-        readonly ProgramManifest manifest;
+        Array.Resize(ref assembly.Objects, assembly.Sources.Length);
 
-        public void Compile()
+        foreach ((SourceFile source, int i) in assembly.Sources.WithIndex())
         {
-            if (assembly == null || manifest == null)
-                ToolchainError.TC0001.Throw();
+            assembly.Objects[i] = source.Language switch
+            {
+                SourceLanguage.Assembly => new AssembledObject($"OBJ{i}", source).Object,
+                _ => new ObjectFile("null")
+            };
 
-            Console.WriteLine("\n\nNo assembly was generated.\n\n");
+            if (assembly.Objects[i].Identifier == "null")
+            {
+                ToolchainError.TC0002.Throw(source.FileName);
+                throw new Exception();
+            }
         }
+
+        Console.WriteLine("\n\nNo assembly was generated.\n\n");
     }
 }

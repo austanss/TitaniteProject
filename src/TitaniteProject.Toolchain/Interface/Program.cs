@@ -1,27 +1,34 @@
-﻿using System;
+﻿global using System;
+global using System.IO;
+global using System.Linq;
 
-using TitaniteProject.Toolchain.Exceptions;
+global using TitaniteProject.Toolchain.Exceptions;
+global using TitaniteProject.Toolchain.Backend;
+global using TitaniteProject.Toolchain.Frontends.Assembly;
+global using TitaniteProject.Toolchain.Interface;
 
-namespace TitaniteProject.Toolchain.Interface
+namespace TitaniteProject.Toolchain.Interface;
+
+public static class Program
 {
-    public static class Program
+    const string VERSION_STRING = "TACC [P3]";
+
+    public static void Main(string[] args)
     {
-        const string VERSION_STRING = "TACC [P3]";
+        Console.WriteLine($"\t -- {VERSION_STRING} -- \n\n");
 
-        public static void Main(string[] args)
+        if (args.Length == 0)
         {
-            Console.WriteLine($"\t -- {VERSION_STRING} -- \n");
-
-            if (args.Length == 0)
-                throw new InsufficientArgumentsException();
-
-            CompilationContext context = new(args);
-
-            Compiler compiler = new(context);
-
-            compiler.Compile();
-
-            return;
+            ToolchainError.TC0001.Throw(null);
+            Environment.Exit(-1);
         }
+
+        CompilationContext context = new(args);
+
+        Compiler compiler = new(context);
+
+        compiler.Compile();
+
+        return;
     }
 }
