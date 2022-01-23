@@ -7,7 +7,12 @@
     <StartupObject>TitaniteProject.Interface.Program</StartupObject>
     <AssemblyName>texi</AssemblyName>
 	<OutputPath>..\..\build\TitaniteProject.Interface</OutputPath>
+	<ApplicationIcon>texi.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="texi.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TitaniteProject.Execution\TitaniteProject.Execution.csproj" />

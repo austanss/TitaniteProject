@@ -12,8 +12,10 @@ internal class FinalizedAssembly
 
     private void Finalize(UnfinalizedAssembly assembly)
     {
+        ulong[] codeOffsets = CalculateCodeOffsets(assembly);
+
         TabledString[] strings = IntegrateStringTables(assembly, out int[] stringOffsets);
-        Symbol[] symbols = IntegrateSymbolTables(assembly, out int[] symbolOffsets);
+        Symbol[] symbols = IntegrateSymbolTables(assembly, codeOffsets, out int[] symbolOffsets);
         TranslatedInstruction[] code = IntegrateCode(assembly, symbolOffsets, stringOffsets);
 
         ObjectHeader header = GenerateHeader(code, symbols, strings);
@@ -63,7 +65,7 @@ internal class FinalizedAssembly
         return table.ToArray();
     }
 
-    private Symbol[] IntegrateSymbolTables(UnfinalizedAssembly assembly, out int[] offsets)
+    private Symbol[] IntegrateSymbolTables(UnfinalizedAssembly assembly, ulong[] codeOffsets, out int[] offsets)
     {
         offsets = new int[assembly.Objects.Length];
 
@@ -73,7 +75,7 @@ internal class FinalizedAssembly
         {
             offsets[i] = table.Count;
             foreach (Symbol @symbol in @object.Symbols)
-                table.Add(new Symbol(@symbol.Identifier, (ulong)(^1).Value));
+                table.Add(new Symbol(symbol.Identifier, codeOffsets[i] + symbol.FileOffset));
         }
 
         return table.ToArray();
@@ -127,6 +129,22 @@ internal class FinalizedAssembly
         };
 
         return header;
+    }
+
+    private ulong[] CalculateCodeOffsets(UnfinalizedAssembly assembly)
+    {
+        ulong[] offsets = new ulong[assembly.Objects.Length];
+        offsets[0] = BackendData.PACKAGE_HEADER_SIZE;
+
+        foreach ((ParsedSource @object, int i) in assembly.Objects.WithIndex())
+        {
+            if (i == 0) continue;
+            offsets[i] = offsets[i - 1];
+            foreach (TranslatedInstruction instruction in @object.Instructions)
+                offsets[i] += 1 + ((ulong)instruction.Operands.Length * 8);
+        }
+
+        return offsets;
     }
 
     public readonly string FileName;
