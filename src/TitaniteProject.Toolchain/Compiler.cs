@@ -9,7 +9,7 @@ internal class Compiler
         manifest = context.Manifest;
     }
 
-    readonly OutputAssembly assembly;
+    readonly UnfinalizedAssembly assembly;
     readonly ProgramManifest manifest;
 
     public void Compile()

@@ -74,6 +74,6 @@ internal class CompilationContext
 
     public SourceFile[] Sources;
     public ProgramManifest Manifest;
-    public OutputAssembly Output;
+    public UnfinalizedAssembly Output;
 
 }

@@ -1,9 +1,9 @@
 ﻿
 namespace TitaniteProject.Toolchain;
 
-internal class OutputAssembly
+internal class UnfinalizedAssembly
 {
-    public OutputAssembly(string name, AssemblyFormat format, SourceFile[] sources)
+    public UnfinalizedAssembly(string name, AssemblyFormat format, SourceFile[] sources)
     {
         Name = name;
         Format = format;
