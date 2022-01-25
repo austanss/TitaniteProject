@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
     internal class DeclareInstruction : Instruction
     {
-        public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
+        public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = UncanonicalIdentifierException.Check(operand.Trim());
+            string identifier = ctx.Strings[operands.Left];
 
             ctx.LocalContext.Declare(identifier);
 

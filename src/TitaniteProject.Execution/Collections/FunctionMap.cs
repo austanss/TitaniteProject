@@ -6,22 +6,22 @@ using TitaniteProject.Execution.Contexts;
 
 namespace TitaniteProject.Execution.Collections
 {
-    internal class FunctionMap<T>
+    internal class FunctionMap<TKey, TArgument>
     {
         public FunctionMap()
         {
-            map = new Dictionary<string, Func<T, ExecutionStatus>>();
+            map = new Dictionary<TKey, Func<TArgument, ExecutionStatus>>();
         }
 
-        private readonly Dictionary<string, Func<T, ExecutionStatus>> map;
+        private readonly Dictionary<TKey, Func<TArgument, ExecutionStatus>> map;
 
         public void Clear()
             => map.Clear();
 
-        public void Register(string key, Func<T, ExecutionStatus> function)
+        public void Register(TKey key, Func<TArgument, ExecutionStatus> function)
             => map.Add(key, function);
 
-        public Func<T, ExecutionStatus> this[string key]
+        public Func<TArgument, ExecutionStatus> this[TKey key]
         {
             get 
             { 

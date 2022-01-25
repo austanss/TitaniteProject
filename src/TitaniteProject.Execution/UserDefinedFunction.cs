@@ -20,7 +20,7 @@ namespace TitaniteProject.Execution
 
         public override ExecutionStatus Invoke(in ExecutionInstance ctx)
         {
-            ctx.Counter = line;
+            ctx.InstructionPointer = line;
             return ExecutionStatus.Normal;
         }
     }

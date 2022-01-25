@@ -19,7 +19,7 @@ namespace TitaniteProject.Execution.IO
         {
             if (ctx.ThreadContext["stdout"] != ulong.MaxValue)
             {
-                ctx.Stdout(ctx.Strings[(int)ctx.ThreadContext["stdout"]]);
+                ctx.Stdout(ctx.Strings[ctx.ThreadContext["stdout"]]);
                 ctx.ThreadContext["stdout"] = ulong.MaxValue;
             }
         }

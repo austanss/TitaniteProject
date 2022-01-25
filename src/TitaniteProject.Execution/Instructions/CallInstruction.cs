@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 
 using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
     internal class CallInstruction : Instruction
     {
-        public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
+        public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = operand.Trim();
+            ulong position = ctx.Symbols[operands.Left];
 
-            ctx.CallStack.Add(new CallStackFrame(ctx.Counter));
+            ctx.CallStack.Add(new CallStackFrame(ctx.InstructionPointer));
 
             ctx.LocalContext = ctx.CallStack.Current.LocalVariables;
 
-            return ctx.Functions[identifier]();
+            ctx.InstructionPointer = position;
+
+            return ExecutionStatus.Normal;
         }
     }
 }

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 
 using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class AssignIntegerInstruction : Instruction
+    internal class AssignInstruction : Instruction
     {
-        public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
+        public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = operand.Split(',')[0].Trim();
-            ulong value = Convert.ToUInt64(operand.Split(',')[1].Trim());
+            string identifier = ctx.Strings[operands.Left];
+            ulong value = operands.Right;
 
             ctx.LocalContext[identifier] = value;
 

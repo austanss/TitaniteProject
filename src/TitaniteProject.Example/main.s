@@ -10,6 +10,7 @@ fnc main:
 	asv text1, "main: Hello, world!"
 	sto stdout, text1
 	cll math
+	nop
 	cll function
 	rtn
 

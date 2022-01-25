@@ -29,8 +29,7 @@ namespace TitaniteProject.Interface
 
             config.Clear();
 
-            config.Add("startup", "main.st");
-            config.Add("manifest", "null");
+            config.Add("startup", "main.exe");
         }
 
         public ProgramLoader LoadConfiguration(string cfgFilePath)
@@ -62,41 +61,63 @@ namespace TitaniteProject.Interface
             return this;
         }
 
-        /// <summary>
-        /// Retrieves the LoadedProgram object and effectively destroys the loader.
-        /// </summary>
-        public ProgramContext RetrieveProgram()
+        public ProgramPackage RetrieveProgram()
         {
             if (used)
                 throw new NotSupportedException("The caller function attempted to reference a loader instance that has been used.");
 
-            ProgramContext program = new();
-            StreamReader sr;
+            ProgramPackage program = new();
+            program.CreateStreams();
 
-            FileStream code;
+            FileStream assembly;
 
-            try { code = File.OpenRead(configuration["startup"]); }
+            try { assembly = File.OpenRead(configuration["startup"]); }
             catch (Exception) { throw new FileLoadException($"The program \"{configuration["startup"]}\" could not be loaded."); }
 
-            sr = new StreamReader(code);
-            program.Content = sr.ReadToEnd();
+            BinaryReader package = new(assembly);
 
-            sr.Dispose();
-            code.Dispose();
+            ulong signature = package.ReadUInt64();
 
-            if (configuration["manifest"] == "null")
+            if (signature != 0x717A917E)
+                throw new FileLoadException($"The program \"{configuration["startup"]}\" could not be loaded.");
+
+            ulong codeOffset = package.ReadUInt64();
+            ulong symbolsOffset = package.ReadUInt64();
+            ulong stringsOffset = package.ReadUInt64();
+            ulong manifestOffset = package.ReadUInt64();
+
+            ulong codeSize = symbolsOffset - codeOffset;
+            ulong symbolsSize = stringsOffset - symbolsOffset;
+            ulong stringsSize = manifestOffset - stringsOffset;
+
+            if (program.Code == null) throw new NullReferenceException("program.Code should not be null.");
+            if (program.SymbolTable == null) throw new NullReferenceException("program.SymbolTable should not be null.");
+            if (program.StringTable == null) throw new NullReferenceException("program.StringTable should not be null.");
+
+            _ = package.BaseStream.Seek((long)codeOffset, SeekOrigin.Begin);
+            package.BaseStream.CopyTo(program.Code, (int)codeSize);
+            _ = package.BaseStream.Seek((long)symbolsOffset, SeekOrigin.Begin);
+            package.BaseStream.CopyTo(program.SymbolTable, (int)symbolsSize);
+            _ = package.BaseStream.Seek((long)stringsOffset, SeekOrigin.Begin);
+            package.BaseStream.CopyTo(program.StringTable, (int)stringsSize);
+
+            _ = package.BaseStream.Seek((long)manifestOffset, SeekOrigin.Begin);
+
+            string manifest = package.ReadString();
+
+            if (manifest == "content: null")
+            {
+                program.Name = "Program";
+                program.Author = "Developer";
+                program.Version = "1.0.0.0";
+                program.Description = "An executable program.";
+
+                configuration.Clear();
+                used = true;
                 return program;
+            }
 
-            FileStream manifest;
-
-            try { manifest = File.OpenRead(configuration["manifest"]); }
-            catch { throw new FileLoadException($"The specified manifest file \"{configuration["manifest"]}\""); }
-
-            sr = new StreamReader(manifest);
-            string[] modifiers = sr.ReadToEnd().Split("\n");
-
-            sr.Dispose();
-            manifest.Dispose();
+            string[] modifiers = manifest.Split('\n');
 
             foreach (string modifier in modifiers)
             {

@@ -24,7 +24,7 @@ namespace TitaniteProject.Interface
                 return;
             }
 
-            ProgramContext program = new ProgramLoader().LoadConfiguration("texi.config").RetrieveProgram();
+            ProgramPackage program = new ProgramLoader().LoadConfiguration("texi.config").RetrieveProgram();
 
             Console.WriteLine($"\nLoading program \"{program.Name}\" (version {program.Version})...\n\n\n");
 

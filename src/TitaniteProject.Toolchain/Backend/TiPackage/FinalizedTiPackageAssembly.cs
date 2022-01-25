@@ -39,6 +39,8 @@ internal class FinalizedTiPackageAssembly
 
         _ = finalizer.Seek((int)header.SymbolTableOffset, SeekOrigin.Begin);
 
+        finalizer.Write((ulong)symbols.Length);
+
         foreach (TiPackageSymbol symbol in symbols)
         {
             finalizer.Write(symbol.Identifier);
@@ -46,6 +48,8 @@ internal class FinalizedTiPackageAssembly
         }
 
         _ = finalizer.Seek((int)header.StringTableOffset, SeekOrigin.Begin);
+
+        finalizer.Write((ulong)strings.Length);
 
         foreach (TiPackageString @string in strings)
         {
@@ -69,8 +73,8 @@ internal class FinalizedTiPackageAssembly
         foreach ((ParsedSource @object, int i) in assembly.Objects.WithIndex())
         {
             offsets[i] = table.Count;
-            foreach (TiPackageString @string in @object.Strings)
-                table.Add(new TiPackageString((ulong)(^1).Value, @string.Value));
+            foreach ((TiPackageString @string, int j) in @object.Strings.WithIndex())
+                table.Add(new TiPackageString((ulong)offsets[i] + (ulong)j, @string.Value));
         }
 
         return table.ToArray();
@@ -133,12 +137,12 @@ internal class FinalizedTiPackageAssembly
         foreach (TiPackageSymbol symbol in symbols)
             offset += sizeof(int) + (ulong)symbol.Identifier.Length + sizeof(ulong);
 
-        ulong stringsOffset = 8 * (offset / 8 + 1);
+        ulong stringsOffset = 8 * ((offset + sizeof(ulong)) / 8 + 1);
 
         foreach (TiPackageString @string in strings)
             offset += sizeof(int) + (ulong)@string.Value.Length + sizeof(ulong);
 
-        ulong manifestOffset = 8 * (offset / 8 + 1);
+        ulong manifestOffset = 8 * ((offset + sizeof(ulong)) / 8 + 1);
 
         TiPackageHeader header = new()
         {
@@ -153,7 +157,7 @@ internal class FinalizedTiPackageAssembly
     private ulong[] CalculateCodeOffsets(UnfinalizedAssembly assembly)
     {
         ulong[] offsets = new ulong[assembly.Objects.Length];
-        offsets[0] = BackendData.PACKAGE_HEADER_SIZE;
+        offsets[0] = uint.MinValue;
 
         foreach ((ParsedSource @object, int i) in assembly.Objects.WithIndex())
         {

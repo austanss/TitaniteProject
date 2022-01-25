@@ -9,6 +9,9 @@
     <Import_RootNamespace>Titanite.TestProgram</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Greetings.tpk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="$(MSBuildThisFileDirectory)main.s">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

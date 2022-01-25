@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 
 using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
     internal class StoreInstruction : Instruction
     {
-        public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
+        public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = operand.Split(',')[1].Trim();
-            string alias = operand.Split(',')[0].Trim();
+            string identifier = ctx.Strings[operands.Right];
+            string alias = ctx.Strings[operands.Left];
 
             if (!ctx.ThreadContext.Contains(alias))
                 ctx.ThreadContext.Declare(alias);

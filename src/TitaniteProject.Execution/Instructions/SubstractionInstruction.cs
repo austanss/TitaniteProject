@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 
 using TitaniteProject.Execution.Contexts;
+using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
     internal class SubstractionInstruction : Instruction
     {
-        public override ExecutionStatus Execute(string operand, in ExecutionInstance ctx)
+        public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = operand.Split(',')[0].Trim();
-            ulong subtrahend = Convert.ToUInt64(operand.Split(',')[1].Trim());
+            string identifier = ctx.Strings[operands.Left];
+            ulong subtrahend = operands.Right;
 
             ulong source = ctx.LocalContext[identifier];
 

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 using TitaniteProject.Execution.Exceptions;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
-using TitaniteProject.Execution.Preliminary;
 using TitaniteProject.Execution.Instructions;
 using TitaniteProject.Execution.IO;
 
@@ -16,31 +16,32 @@ namespace TitaniteProject.Execution
     {
         internal StandardOutput Stdout;
 
-        internal ProgramContext Program;
+        internal ProgramPackage Program;
 
-        internal FunctionMap<string> Instructions;
-        internal ParameterlessFunctionMap Functions;
+        internal FunctionMap<byte, OperandPair> Instructions;
 
         internal VariableContext ThreadContext;
         internal VariableContext LocalContext;
 
         internal CallStack CallStack;
 
-        internal AllocatedCollection<string> Strings;
+        internal StringTable Strings;
+        internal SymbolTable Symbols;
 
         internal IOManager IO;
 
-        internal ulong Counter;
+        internal ulong InstructionPointer
+        {
+            get => (ulong)Program.Code.Position;
+            set => Program.Code.Seek((long)value, SeekOrigin.Begin);
+        }
 
-        public bool Instantiated;
-
-        public ExecutionInstance(ProgramContext program, StandardOutput stdout)
+        public ExecutionInstance(ProgramPackage program, StandardOutput stdout)
         {
             Program = program;
             Stdout = stdout;
 
-            Instructions = new FunctionMap<string>();
-            Functions = new ParameterlessFunctionMap();
+            Instructions = new FunctionMap<byte, OperandPair>();
 
             Instructions = GenerateInstructionMap(Instructions);
 
@@ -48,61 +49,100 @@ namespace TitaniteProject.Execution
 
             LocalContext = CallStack.Current.LocalVariables;
             ThreadContext = new VariableContext();
-            Strings = new AllocatedCollection<string>();
+
+            Strings = ParseStringTable(new StringTable());
+            Symbols = ParseSymbolTable(new SymbolTable());
 
             IO = new IOManager(this);
 
-            ulong[] functions = new FunctionSweep(program).Catalyze();
-            string[] declarations = new ArraySelection<string>(program.Content.Split('\n'), functions).Catalyze();
-
-            if (declarations.Length != functions.Length)
-                throw new ExecutionCorruptionException();
-
-            for (int i = 0; i < declarations.Length; i++)
-            {
-                string identifier = declarations[i].Replace('\r', ' ').Trim();
-                identifier = identifier[4..(identifier.Length - 1)];
-
-                new UserDefinedFunction(identifier, functions[i]);
-                Functions.Register(identifier, () => UserDefinedFunction.List[identifier].Invoke(this));
-            }
-
-            Counter = 0;
+            InstructionPointer = 0;
         }
 
-        private FunctionMap<string> GenerateInstructionMap(in FunctionMap<string> map)
+        private FunctionMap<byte, OperandPair> GenerateInstructionMap(in FunctionMap<byte, OperandPair> map)
         {
             map.Clear();
-            map.Register("dcl", (string operand) => Instruction.Declare.Execute(operand, this));
-            map.Register("asv", (string operand) => Instruction.AssignString.Execute(operand, this));
-            map.Register("aiv", (string operand) => Instruction.AssignInteger.Execute(operand, this));
-            map.Register("sto", (string operand) => Instruction.Store.Execute(operand, this));
-            map.Register("lod", (string operand) => Instruction.Load.Execute(operand, this));
-            map.Register("cpy", (string operand) => Instruction.Copy.Execute(operand, this));
-            map.Register("cll", (string operand) => Instruction.Call.Execute(operand, this));
-            map.Register("rtn", (string operand) => Instruction.Return.Execute(operand, this));
-            map.Register("fnc", (string operand) => Instruction.Null.Execute(operand, this));
-            map.Register("add", (string operand) => Instruction.Add.Execute(operand, this));
-            map.Register("sub", (string operand) => Instruction.Substract.Execute(operand, this));
-            map.Register("mul", (string operand) => Instruction.Multiply.Execute(operand, this));
-            map.Register("div", (string operand) => Instruction.Divide.Execute(operand, this));
+            map.Register(0x01, (OperandPair operands) => Instruction.Declare.Execute(operands, this));
+            map.Register(0x02, (OperandPair operands) => Instruction.Assign.Execute(operands, this));
+            map.Register(0x03, (OperandPair operands) => Instruction.Store.Execute(operands, this));
+            map.Register(0x04, (OperandPair operands) => Instruction.Load.Execute(operands, this));
+            map.Register(0x05, (OperandPair operands) => Instruction.Copy.Execute(operands, this));
+            map.Register(0x06, (OperandPair operands) => Instruction.Call.Execute(operands, this));
+            map.Register(0x07, (OperandPair operands) => Instruction.Return.Execute(operands, this));
+            map.Register(0x08, (OperandPair operands) => Instruction.Stall.Execute(operands, this));
+            map.Register(0x09, (OperandPair operands) => Instruction.Add.Execute(operands, this));
+            map.Register(0x0A, (OperandPair operands) => Instruction.Substract.Execute(operands, this));
+            map.Register(0x0B, (OperandPair operands) => Instruction.Multiply.Execute(operands, this));
+            map.Register(0x0C, (OperandPair operands) => Instruction.Divide.Execute(operands, this));
             return map;
+        }
+
+        private SymbolTable ParseSymbolTable(in SymbolTable table)
+        {
+            BinaryReader reader = new BinaryReader(Program.SymbolTable);
+            _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            ulong length = reader.ReadUInt64();
+
+            ulong index = 0;
+
+            while (index < length)
+            {
+                _ = reader.ReadString();
+
+                table.Register(index, reader.ReadUInt64());
+
+                index++;
+            }
+
+            return table;
+        }
+
+        private StringTable ParseStringTable(in StringTable table)
+        {
+            BinaryReader reader = new BinaryReader(Program.StringTable);
+            _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            ulong length = reader.ReadUInt64();
+
+            ulong index = 0;
+
+            while (index < length)
+            {
+                string value = reader.ReadString();
+
+                if (value == "")
+                    break;
+
+                table.Register(reader.ReadUInt64(), value);
+
+                index++;
+            }
+
+            table.ReadOnlyLimit = index;
+
+            return table;
         }
 
         public void Run()
         {
-            string[] lines = Program.Content.Split('\n');
-
-            InstructionParser processor = new InstructionParser(this);
+            InstructionProcessor processor = new InstructionProcessor(this);
 
             ExecutionStatus status = ExecutionStatus.Normal;
+
+            _ = Program.Code.Seek(0, SeekOrigin.Begin);
+            BinaryReader head = new BinaryReader(Program.Code);
 
             while (status == ExecutionStatus.Normal)
             {
                 IO.Check();
 
-                status = processor.Process(lines[Counter]);
-                ++Counter;
+                InstructionData instruction = new InstructionData
+                {
+                    Opcode = head.ReadByte(),
+                    Operands = new OperandPair(head.ReadUInt64(), head.ReadUInt64())
+                };
+
+                status = processor.Process(instruction);
             }
 
             if (status == ExecutionStatus.EndOfProgram)
@@ -115,7 +155,7 @@ namespace TitaniteProject.Execution
                 throw new ExecutionCorruptionException($"{ExecutionCorruptionException.CODE}: The execution loop was exited unexpectedly.");
 
             if (status == ExecutionStatus.InvalidInstruction || status == ExecutionStatus.InvalidOperands)
-                throw new SyntaxErrorException(Counter);
+                throw new InvalidOpcodeException($"{InvalidOpcodeException.CODE}: The loaded assembly contains an invalid opcode at byte ${InstructionPointer}");
         }
     }
 }
