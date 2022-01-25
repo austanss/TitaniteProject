@@ -113,6 +113,12 @@ namespace TitaniteProject.Execution
                 if (value == "")
                     break;
 
+                if (value[0] == '"')
+                {
+                    value = value.Remove(0, 1);
+                    value = value.Remove(value.Length - 1, 1);
+                }
+
                 table.Register(reader.ReadUInt64(), value);
 
                 index++;

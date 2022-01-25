@@ -66,7 +66,7 @@ internal record class ParsedAssemblySource : ParsedSource
             }
 
             for (int i = 0; i < parameters.Length; i++)
-            { 
+            {
                 parameters[i] = parameters[i].Trim();
                 if (parameters[i] == "")
                     parameters[i] = AssemblerData.NULL_PARAMETER;
