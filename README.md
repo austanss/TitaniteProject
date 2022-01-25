@@ -32,11 +32,11 @@ Large execution overhead is an issue that may be addressed in the future.
 ## Work in progress
 The Titanite Project is under active development.
 
-These features have been implemented as of P2:
+These features have been implemented as of P3:
  
  - The **platform**
-   - Directly-interpreted assembly (instead of bytecode)
-   - Simple execution with limited instructions
+   - Interpreted bytecode
+   - Simple execution with minimal instructions
      - text output
      - variables
      - contexts/call stacks
@@ -46,7 +46,12 @@ These features have been implemented as of P2:
  - The **front-end**
    - Basic console app
    - Parses a basic configuration
-   - Parses a basic manifest
-   - Loads the program
+   - Loads the program, reads manifest
+ - The **toolchain** -*NEW!*
+   - Parses assembly source code
+   - Supports multiple source files
+   - Generates a nonstandard binary
+   - Integrates the manifest
+   - Self-contained assembly
 
-As of P2, thanks to .NET portability, the entire repository can be built and ran on any platform implementing the .NET 6 runtime.
+As of P3, thanks to .NET portability, the entire repository can be built and ran on any platform implementing the .NET 6 runtime.
