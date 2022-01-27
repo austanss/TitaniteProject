@@ -13,7 +13,7 @@ namespace TitaniteProject.Toolchain.Interface;
 
 public static class Program
 {
-    const string VERSION_STRING = "TACC [P3]";
+    const string VERSION_STRING = "TACC [P4]";
 
     public static void Main(string[] args)
     {
