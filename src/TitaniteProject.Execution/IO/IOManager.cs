@@ -22,6 +22,12 @@ namespace TitaniteProject.Execution.IO
 
         private readonly ExecutionInstance _ctx;
 
+        public void Install(IOManagerPlugin plugin)
+        {
+            _plugins.Add(plugin);
+            _plugins[^0].Initialize(_ctx);
+        }
+
         public void Check()
         {
             foreach (IOManagerPlugin plugin in _plugins)
