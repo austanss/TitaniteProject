@@ -16,7 +16,7 @@ namespace TitaniteProject.Execution.Instructions
         public static Instruction None = new Instructions.EmptyInstruction();
 
         public static Instruction Define = new Instructions.DefineInstruction();
-        public static Instruction Set = new Instructions.SetInstruction();
+        public static Instruction Move = new Instructions.MoveInstruction();
 
         public static Instruction Write = new Instructions.WriteInstruction();
         public static Instruction Read = new Instructions.ReadInstruction();

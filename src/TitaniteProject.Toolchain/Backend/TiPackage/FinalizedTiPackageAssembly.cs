@@ -114,7 +114,7 @@ internal class FinalizedTiPackageAssembly
 
                 if (opcode == BackendData.PACKAGE_STRING_OPCODE)
                 {
-                    opcode = (byte)InstructionOpcode.Set;
+                    opcode = (byte)InstructionOpcode.Move;
                     operands[1] = operands[1] + (ulong)stringOffsets[i];
                 }
 

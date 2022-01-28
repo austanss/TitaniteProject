@@ -6,7 +6,7 @@ internal static class AssemblerData
     public static readonly Dictionary<string, byte> TranslationTable = new()
     {
         { "def", (byte)InstructionOpcode.Define },
-        { "set", (byte)InstructionOpcode.Set },
+        { "mvv", (byte)InstructionOpcode.Move },
         { "wrr", (byte)InstructionOpcode.Write },
         { "rdd", (byte)InstructionOpcode.Read },
         { "jmp", (byte)InstructionOpcode.Jump },

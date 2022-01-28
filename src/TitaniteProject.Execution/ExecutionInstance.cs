@@ -62,7 +62,7 @@ namespace TitaniteProject.Execution
         {
             map.Clear();
             map.Register(0x01, (OperandPair operands) => Instruction.Define.Execute(operands, this));
-            map.Register(0x02, (OperandPair operands) => Instruction.Set.Execute(operands, this));
+            map.Register(0x02, (OperandPair operands) => Instruction.Move.Execute(operands, this));
             map.Register(0x03, (OperandPair operands) => Instruction.Write.Execute(operands, this));
             map.Register(0x04, (OperandPair operands) => Instruction.Read.Execute(operands, this));
             map.Register(0x05, (OperandPair operands) => Instruction.Jump.Execute(operands, this));

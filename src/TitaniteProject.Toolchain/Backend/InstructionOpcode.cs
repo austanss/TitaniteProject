@@ -4,7 +4,7 @@ namespace TitaniteProject.Toolchain.Backend;
 internal enum InstructionOpcode : byte
 {
     Define = 0x01,
-    Set = 0x02,
+    Move = 0x02,
     Write = 0x03,
     Read = 0x04,
     Jump = 0x05,

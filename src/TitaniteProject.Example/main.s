@@ -7,7 +7,7 @@
 
 :main
 	def text1
-	set text1, "main: Hello, world!"
+	mvv text1, "main: Hello, world!"
 	wrr stdout, text1
 	jmp math
 	nop
@@ -16,13 +16,13 @@
 
 :func
 	def text2
-	set text2, "function: Hello, world!"
+	mvv text2, "function: Hello, world!"
 	wrr stdout, text2
 	ret
 
 :math
 	def number
-	set number, 2
+	mvv number, 2
 	mul number, 4
 	div number, 2
 	add number, 5
