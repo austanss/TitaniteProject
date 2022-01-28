@@ -6,9 +6,9 @@ internal record class ParsedAssemblySource : ParsedSource
 
     public ParsedAssemblySource(SourceFile source)
     {
-        List<TranslatedInstruction> instructions = new();
-        List<TiPackageSymbol> symbols = new();
-        List<TiPackageString> strings = new();
+        List<InstructionData> instructions = new();
+        List<PackageSymbol> symbols = new();
+        List<PackageString> strings = new();
 
         Parse(source, instructions, symbols, strings);
 
@@ -17,7 +17,7 @@ internal record class ParsedAssemblySource : ParsedSource
         Strings = strings.ToArray();
     }
 
-    private void Parse(SourceFile source, in List<TranslatedInstruction> instructions, in List<TiPackageSymbol> symbols, in List<TiPackageString> strings)
+    private void Parse(SourceFile source, in List<InstructionData> instructions, in List<PackageSymbol> symbols, in List<PackageString> strings)
     {
         StreamReader reader = new(source.Stream);
 
@@ -77,13 +77,13 @@ internal record class ParsedAssemblySource : ParsedSource
             {
                 if (opcode == (byte)InstructionOpcode.Jump && i == 0)
                 {
-                    operands[0] = (ulong)symbols.IndexOf(new TiPackageSymbol(parameter, 0));
+                    operands[0] = (ulong)symbols.IndexOf(new PackageSymbol(parameter, 0));
                 }
                 else if (parameter == AssemblerData.NULL_PARAMETER) operands[i] = 0;
                 else if (!ulong.TryParse(parameter, out _))
                 {
-                    if (strings.Contains(new TiPackageString(0, parameter)))
-                        operands[i] = strings[strings.IndexOf(new TiPackageString(0, parameter))].Index;
+                    if (strings.Contains(new PackageString(0, parameter)))
+                        operands[i] = strings[strings.IndexOf(new PackageString(0, parameter))].Index;
                     else
                     {
                         strings.Add(new((ulong)strings.Count, parameter));
@@ -98,24 +98,24 @@ internal record class ParsedAssemblySource : ParsedSource
         }
     }
 
-    public TiPackageHeader GenerateHeader()
+    public PackageHeader GenerateHeader()
     {
         ulong offset = BackendData.PACKAGE_HEADER_SIZE;
 
-        foreach (TranslatedInstruction instruction in Instructions)
+        foreach (InstructionData instruction in Instructions)
             offset += sizeof(byte) + (2 * sizeof(ulong));
 
         ulong symbolsOffset = offset;
 
-        foreach (TiPackageSymbol symbol in Symbols)
+        foreach (PackageSymbol symbol in Symbols)
             offset += sizeof(int) + (ulong)symbol.Identifier.Length + sizeof(ulong);
 
         ulong stringsOffset = offset;
 
-        foreach (TiPackageString @string in Strings)
+        foreach (PackageString @string in Strings)
             offset += sizeof(int) + (ulong)@string.Value.Length + sizeof(ulong);
 
-        TiPackageHeader header = new()
+        PackageHeader header = new()
         {
             SymbolTableOffset = symbolsOffset,
             StringTableOffset = stringsOffset
@@ -124,7 +124,7 @@ internal record class ParsedAssemblySource : ParsedSource
         return header;
     }
 
-    public override TranslatedInstruction[] Instructions { get; protected set; }
-    public override TiPackageSymbol[] Symbols { get; protected set; }
-    public override TiPackageString[] Strings { get; protected set; }
+    public override InstructionData[] Instructions { get; protected set; }
+    public override PackageSymbol[] Symbols { get; protected set; }
+    public override PackageString[] Strings { get; protected set; }
 }

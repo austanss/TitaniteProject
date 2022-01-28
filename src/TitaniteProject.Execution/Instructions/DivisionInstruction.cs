@@ -5,6 +5,8 @@ using System.Text;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
 
+using TitaniteProject.Commons;
+
 namespace TitaniteProject.Execution.Instructions
 {
     internal class DivisionInstruction : Instruction

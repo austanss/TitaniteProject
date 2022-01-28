@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TitaniteProject.Execution.Collections
+namespace TitaniteProject.Commons
 {
     internal struct OperandPair
     {

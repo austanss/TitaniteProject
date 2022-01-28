@@ -9,11 +9,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitaniteProject.Interface",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TitaniteProject.Example", "src\TitaniteProject.Example\TitaniteProject.Example.shproj", "{7F7B9D22-8ECB-4F3E-A896-BD9EDF43D418}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitaniteProject.Toolchain", "src\TitaniteProject.Toolchain\TitaniteProject.Toolchain.csproj", "{3006475A-4DE8-422A-B63C-463753220AF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitaniteProject.Toolchain", "src\TitaniteProject.Toolchain\TitaniteProject.Toolchain.csproj", "{3006475A-4DE8-422A-B63C-463753220AF9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TitaniteProject.Commons", "TitaniteProject.Commons\TitaniteProject.Commons.shproj", "{2613C8F7-E99B-4312-9E54-6106DB0C8BA8}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TitaniteProject.Commons\TitaniteProject.Commons.projitems*{1912884a-9045-4aef-8e36-9aacdd7ab7a8}*SharedItemsImports = 5
+		TitaniteProject.Commons\TitaniteProject.Commons.projitems*{2613c8f7-e99b-4312-9e54-6106db0c8ba8}*SharedItemsImports = 13
 		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{3006475a-4de8-422a-b63c-463753220af9}*SharedItemsImports = 5
+		TitaniteProject.Commons\TitaniteProject.Commons.projitems*{3006475a-4de8-422a-b63c-463753220af9}*SharedItemsImports = 5
 		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{36a85100-64df-4c78-960f-4f643a460484}*SharedItemsImports = 5
 		src\TitaniteProject.Example\TitaniteProject.Example.projitems*{7f7b9d22-8ecb-4f3e-a896-bd9edf43d418}*SharedItemsImports = 13
 	EndGlobalSection

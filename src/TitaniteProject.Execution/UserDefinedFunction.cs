@@ -11,7 +11,7 @@ namespace TitaniteProject.Execution
         public UserDefinedFunction(string identifier, ulong line)
         {
             this.line = line;
-            List.TryAdd(identifier, this);
+            _ = List.TryAdd(identifier, this);
         }
 
         private readonly ulong line;

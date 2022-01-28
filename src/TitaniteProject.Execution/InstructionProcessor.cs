@@ -5,6 +5,8 @@ using System.Text;
 using TitaniteProject.Execution.Contexts;
 using TitaniteProject.Execution.Collections;
 
+using TitaniteProject.Commons;
+
 namespace TitaniteProject.Execution
 {
     internal class InstructionProcessor
