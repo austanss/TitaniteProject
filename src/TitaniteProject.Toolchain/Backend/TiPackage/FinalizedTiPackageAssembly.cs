@@ -109,12 +109,12 @@ internal class FinalizedTiPackageAssembly
 
                 Array.Copy(instruction.Operands, operands, 2);
 
-                if (opcode == (byte)InstructionOpcode.Call)
+                if (opcode == (byte)InstructionOpcode.Jump)
                     operands[0] = operands[0] + (ulong)symbolOffsets[i];
 
-                if (opcode == (byte)InstructionOpcode.String)
+                if (opcode == BackendData.PACKAGE_STRING_OPCODE)
                 {
-                    opcode = (byte)InstructionOpcode.Assign;
+                    opcode = (byte)InstructionOpcode.Set;
                     operands[1] = operands[1] + (ulong)stringOffsets[i];
                 }
 

@@ -5,22 +5,22 @@ internal static class AssemblerData
 {
     public static readonly Dictionary<string, byte> TranslationTable = new()
     {
-        { "dcl", (byte)InstructionOpcode.Declare },
-        { "aiv", (byte)InstructionOpcode.Assign },
-        { "asv", (byte)InstructionOpcode.String },
-        { "sto", (byte)InstructionOpcode.Store },
-        { "lod", (byte)InstructionOpcode.Load },
-        { "cpy", (byte)InstructionOpcode.Copy },
-        { "cll", (byte)InstructionOpcode.Call },
-        { "rtn", (byte)InstructionOpcode.Return },
-        { "nop", (byte)InstructionOpcode.Stall },
+        { "def", (byte)InstructionOpcode.Define },
+        { "set", (byte)InstructionOpcode.Set },
+        { "wrr", (byte)InstructionOpcode.Write },
+        { "rdd", (byte)InstructionOpcode.Read },
+        { "jmp", (byte)InstructionOpcode.Jump },
+        { "ret", (byte)InstructionOpcode.Return },
+        { "nop", (byte)InstructionOpcode.None },
+        { "spl", (byte)InstructionOpcode.Split },
+        { "slc", (byte)InstructionOpcode.Select },
         { "add", (byte)InstructionOpcode.Add },
         { "sub", (byte)InstructionOpcode.Subtract },
         { "mul", (byte)InstructionOpcode.Multiply },
         { "div", (byte)InstructionOpcode.Divide },
     };
 
-    public const string FUNCTION_MNEMONIC = "fnc";
+    public const char LABEL_INDICATOR = ':';
     public const string NULL_PARAMETER = "\0\0\0\0";
 
     public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self)

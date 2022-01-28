@@ -5,26 +5,26 @@
 
 ; This file is released to the public domain. ;
 
-fnc main:
-	dcl text1
-	asv text1, "main: Hello, world!"
-	sto stdout, text1
-	cll math
+:main
+	def text1
+	set text1, "main: Hello, world!"
+	wrr stdout, text1
+	jmp math
 	nop
-	cll function
-	rtn
+	jmp func
+	ret
 
-fnc function:
-	dcl text2
-	asv text2, "function: Hello, world!"
-	sto stdout, text2
-	rtn
+:func
+	def text2
+	set text2, "function: Hello, world!"
+	wrr stdout, text2
+	ret
 
-fnc math:
-	dcl number
-	aiv number, 2
+:math
+	def number
+	set number, 2
 	mul number, 4
 	div number, 2
 	add number, 5
 	sub number, 3
-	rtn
+	ret

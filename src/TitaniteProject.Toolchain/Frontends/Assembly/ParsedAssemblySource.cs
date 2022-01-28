@@ -27,10 +27,10 @@ internal record class ParsedAssemblySource : ParsedSource
 
         while ((line = reader.ReadLine()) != null)
         {
-            if (line.Trim().StartsWith(';') || line.Trim() == "") continue;
-            if (line.Trim().Split(' ')[0] == AssemblerData.FUNCTION_MNEMONIC)
+            if (line.Trim() == "" || line.Trim()[0] == ';') continue;
+            if (line.Trim()[0] == AssemblerData.LABEL_INDICATOR)
             {
-                symbols.Add(new(line.Trim().Remove(0, 4).Trim()[..^1], offset));
+                symbols.Add(new(line.Trim()[1..].Trim()[..^1], offset));
                 continue;
             }
             offset += 1 + ((ulong)2 * 8);
@@ -44,13 +44,10 @@ internal record class ParsedAssemblySource : ParsedSource
         {
             string instruction = line.Trim();
 
-            if (instruction.StartsWith(';') || instruction == "")
+            if (instruction == "" || instruction[0] == AssemblerData.LABEL_INDICATOR || instruction[0] == ';')
                 continue;
 
             string mnemonic = instruction.Split(' ')[0];
-
-            if (mnemonic == AssemblerData.FUNCTION_MNEMONIC)
-                continue;
 
             string[] parameters = new string[2]; 
 
@@ -78,7 +75,7 @@ internal record class ParsedAssemblySource : ParsedSource
 
             foreach ((string parameter, int i) in parameters.WithIndex())
             {
-                if (opcode == (byte)InstructionOpcode.Call && i == 0)
+                if (opcode == (byte)InstructionOpcode.Jump && i == 0)
                 {
                     operands[0] = (ulong)symbols.IndexOf(new TiPackageSymbol(parameter, 0));
                 }
