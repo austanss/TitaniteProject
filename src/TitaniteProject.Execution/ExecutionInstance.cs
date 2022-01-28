@@ -61,18 +61,19 @@ namespace TitaniteProject.Execution
         private FunctionMap<byte, OperandPair> GenerateInstructionMap(in FunctionMap<byte, OperandPair> map)
         {
             map.Clear();
-            map.Register(0x01, (OperandPair operands) => Instruction.Declare.Execute(operands, this));
-            map.Register(0x02, (OperandPair operands) => Instruction.Assign.Execute(operands, this));
-            map.Register(0x03, (OperandPair operands) => Instruction.Store.Execute(operands, this));
-            map.Register(0x04, (OperandPair operands) => Instruction.Load.Execute(operands, this));
-            map.Register(0x05, (OperandPair operands) => Instruction.Copy.Execute(operands, this));
-            map.Register(0x06, (OperandPair operands) => Instruction.Call.Execute(operands, this));
-            map.Register(0x07, (OperandPair operands) => Instruction.Return.Execute(operands, this));
-            map.Register(0x08, (OperandPair operands) => Instruction.Stall.Execute(operands, this));
-            map.Register(0x09, (OperandPair operands) => Instruction.Add.Execute(operands, this));
-            map.Register(0x0A, (OperandPair operands) => Instruction.Substract.Execute(operands, this));
-            map.Register(0x0B, (OperandPair operands) => Instruction.Multiply.Execute(operands, this));
-            map.Register(0x0C, (OperandPair operands) => Instruction.Divide.Execute(operands, this));
+            map.Register(0x01, (OperandPair operands) => Instruction.Define.Execute(operands, this));
+            map.Register(0x02, (OperandPair operands) => Instruction.Set.Execute(operands, this));
+            map.Register(0x03, (OperandPair operands) => Instruction.Write.Execute(operands, this));
+            map.Register(0x04, (OperandPair operands) => Instruction.Read.Execute(operands, this));
+            map.Register(0x05, (OperandPair operands) => Instruction.Jump.Execute(operands, this));
+            map.Register(0x06, (OperandPair operands) => Instruction.Return.Execute(operands, this));
+            map.Register(0x07, (OperandPair operands) => Instruction.None.Execute(operands, this));
+            map.Register(0x08, (OperandPair operands) => Instruction.Split.Execute(operands, this));
+            map.Register(0x09, (OperandPair operands) => Instruction.Select.Execute(operands, this));
+            map.Register(0x0A, (OperandPair operands) => Instruction.Add.Execute(operands, this));
+            map.Register(0x0B, (OperandPair operands) => Instruction.Subtract.Execute(operands, this));
+            map.Register(0x0C, (OperandPair operands) => Instruction.Multiply.Execute(operands, this));
+            map.Register(0x0D, (OperandPair operands) => Instruction.Divide.Execute(operands, this));
             return map;
         }
 

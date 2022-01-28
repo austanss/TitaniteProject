@@ -7,7 +7,7 @@ using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class StoreInstruction : Instruction
+    internal class WriteInstruction : Instruction
     {
         public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {

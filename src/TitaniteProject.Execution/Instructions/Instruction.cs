@@ -13,20 +13,22 @@ namespace TitaniteProject.Execution.Instructions
 
         public virtual ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx) { return ExecutionStatus.Corrupted; }
 
-        public static Instruction Stall = new Instructions.StallInstruction();
+        public static Instruction None = new Instructions.EmptyInstruction();
 
-        public static Instruction Declare = new Instructions.DeclareInstruction();
-        public static Instruction Store = new Instructions.StoreInstruction();
-        public static Instruction Load = new Instructions.LoadInstruction();
+        public static Instruction Define = new Instructions.DefineInstruction();
+        public static Instruction Set = new Instructions.SetInstruction();
 
-        public static Instruction Assign = new Instructions.AssignInstruction();
-        public static Instruction Copy = new Instructions.CopyInstruction();
+        public static Instruction Write = new Instructions.WriteInstruction();
+        public static Instruction Read = new Instructions.ReadInstruction();
 
-        public static Instruction Call = new Instructions.CallInstruction();
+        public static Instruction Jump = new Instructions.JumpInstruction();
         public static Instruction Return = new Instructions.ReturnInstruction();
 
+        public static Instruction Split = new Instructions.EmptyInstruction();
+        public static Instruction Select = new Instructions.EmptyInstruction();
+
         public static Instruction Add = new Instructions.AdditionInstruction();
-        public static Instruction Substract = new Instructions.SubstractionInstruction();
+        public static Instruction Subtract = new Instructions.SubtractionInstruction();
         public static Instruction Multiply = new Instructions.MultiplicationInstruction();
         public static Instruction Divide = new Instructions.DivisionInstruction();
     }

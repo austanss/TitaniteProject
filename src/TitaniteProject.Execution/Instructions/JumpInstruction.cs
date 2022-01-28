@@ -7,18 +7,17 @@ using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class SubstractionInstruction : Instruction
+    internal class JumpInstruction : Instruction
     {
         public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
-            string identifier = ctx.Strings[operands.Left];
-            ulong subtrahend = operands.Right;
+            ulong position = ctx.Symbols[operands.Left];
 
-            ulong source = ctx.LocalContext[identifier];
+            ctx.CallStack.Add(new CallStackFrame(ctx.InstructionPointer));
 
-            ulong difference = source - subtrahend;
+            ctx.LocalContext = ctx.CallStack.Current.LocalVariables;
 
-            ctx.LocalContext[identifier] = difference;
+            ctx.InstructionPointer = position;
 
             return ExecutionStatus.Normal;
         }

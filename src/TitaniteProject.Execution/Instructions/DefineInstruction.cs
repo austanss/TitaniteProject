@@ -7,14 +7,13 @@ using TitaniteProject.Execution.Collections;
 
 namespace TitaniteProject.Execution.Instructions
 {
-    internal class AssignInstruction : Instruction
+    internal class DefineInstruction : Instruction
     {
         public override ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx)
         {
             string identifier = ctx.Strings[operands.Left];
-            ulong value = operands.Right;
 
-            ctx.LocalContext[identifier] = value;
+            ctx.LocalContext.Declare(identifier);
 
             return ExecutionStatus.Normal;
         }
