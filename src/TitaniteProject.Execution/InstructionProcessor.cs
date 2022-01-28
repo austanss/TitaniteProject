@@ -16,7 +16,7 @@ namespace TitaniteProject.Execution
 
         public ExecutionStatus Process(InstructionData instruction)
         {
-            return instruction.Opcode > 0x0C
+            return instruction.Opcode > 0x0D || instruction.Opcode < 0x01
                 ? ExecutionStatus.InvalidInstruction
                 : instance.Instructions[instruction.Opcode](instruction.Operands);
         }

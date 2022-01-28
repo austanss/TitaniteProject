@@ -30,7 +30,7 @@ internal record class ParsedAssemblySource : ParsedSource
             if (line.Trim() == "" || line.Trim()[0] == ';') continue;
             if (line.Trim()[0] == AssemblerData.LABEL_INDICATOR)
             {
-                symbols.Add(new(line.Trim()[1..].Trim()[..^1], offset));
+                symbols.Add(new(line.Trim()[1..].Trim(), offset));
                 continue;
             }
             offset += 1 + ((ulong)2 * 8);
