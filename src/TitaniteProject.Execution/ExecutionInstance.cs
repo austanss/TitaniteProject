@@ -22,6 +22,7 @@ namespace TitaniteProject.Execution
 
         internal VariableContext ThreadContext;
         internal VariableContext LocalContext;
+        internal ArrayCollection Arrays;
 
         internal CallStack CallStack;
 
@@ -49,6 +50,8 @@ namespace TitaniteProject.Execution
 
             LocalContext = CallStack.Current.LocalVariables;
             ThreadContext = new VariableContext();
+
+            Arrays = new ArrayCollection();
 
             Strings = ParseStringTable(new StringTable());
             Symbols = ParseSymbolTable(new SymbolTable());

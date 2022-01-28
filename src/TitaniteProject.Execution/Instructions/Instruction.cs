@@ -13,23 +13,23 @@ namespace TitaniteProject.Execution.Instructions
 
         public virtual ExecutionStatus Execute(OperandPair operands, in ExecutionInstance ctx) { return ExecutionStatus.Corrupted; }
 
-        public static Instruction None = new Instructions.EmptyInstruction();
+        public static Instruction None = new EmptyInstruction();
 
-        public static Instruction Define = new Instructions.DefineInstruction();
-        public static Instruction Move = new Instructions.MoveInstruction();
+        public static Instruction Define = new DefineInstruction();
+        public static Instruction Move = new MoveInstruction();
 
-        public static Instruction Write = new Instructions.WriteInstruction();
-        public static Instruction Read = new Instructions.ReadInstruction();
+        public static Instruction Write = new WriteInstruction();
+        public static Instruction Read = new ReadInstruction();
 
-        public static Instruction Jump = new Instructions.JumpInstruction();
-        public static Instruction Return = new Instructions.ReturnInstruction();
+        public static Instruction Jump = new JumpInstruction();
+        public static Instruction Return = new ReturnInstruction();
 
-        public static Instruction Split = new Instructions.EmptyInstruction();
-        public static Instruction Select = new Instructions.EmptyInstruction();
+        public static Instruction Split = new SplitInstruction();
+        public static Instruction Select = new EmptyInstruction();
 
-        public static Instruction Add = new Instructions.AdditionInstruction();
-        public static Instruction Subtract = new Instructions.SubtractionInstruction();
-        public static Instruction Multiply = new Instructions.MultiplicationInstruction();
-        public static Instruction Divide = new Instructions.DivisionInstruction();
+        public static Instruction Add = new AdditionInstruction();
+        public static Instruction Subtract = new SubtractionInstruction();
+        public static Instruction Multiply = new MultiplicationInstruction();
+        public static Instruction Divide = new DivisionInstruction();
     }
 }
