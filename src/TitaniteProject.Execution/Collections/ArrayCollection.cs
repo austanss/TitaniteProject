@@ -35,5 +35,14 @@ namespace TitaniteProject.Execution.Collections
 
         public void Destroy(ulong reference)
             => _ = _arrays.Remove(reference);
+
+        public bool Contains(string identifer)
+        {
+            foreach (RuntimeArray array in _arrays.Values)
+                if (array.Identifier == identifer)
+                    return true;
+
+            return false;
+        }
     }
 }
