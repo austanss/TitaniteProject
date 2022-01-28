@@ -33,8 +33,8 @@ internal class FinalizedTiPackageAssembly
         foreach (TranslatedInstruction instruction in code)
         {
             finalizer.Write(instruction.Opcode);
-            foreach (ulong operand in instruction.Operands)
-                finalizer.Write(operand);
+            finalizer.Write(instruction.Operands.Left);
+            finalizer.Write(instruction.Operands.Right);
         }
 
         _ = finalizer.Seek((int)header.SymbolTableOffset, SeekOrigin.Begin);
@@ -107,7 +107,8 @@ internal class FinalizedTiPackageAssembly
                 byte opcode = instruction.Opcode;
                 ulong[] operands = new ulong[2];
 
-                Array.Copy(instruction.Operands, operands, 2);
+                operands[0] = instruction.Operands[0];
+                operands[1] = instruction.Operands[1];
 
                 if (opcode == (byte)InstructionOpcode.Jump)
                     operands[0] = operands[0] + (ulong)symbolOffsets[i];
@@ -118,7 +119,7 @@ internal class FinalizedTiPackageAssembly
                     operands[1] = operands[1] + (ulong)stringOffsets[i];
                 }
 
-                code.Add(new TranslatedInstruction(opcode, operands));
+                code.Add(new TranslatedInstruction(opcode, 0, new OperandPair(operands[0], operands[1])));
             }
         }
 
@@ -130,7 +131,7 @@ internal class FinalizedTiPackageAssembly
         ulong offset = BackendData.PACKAGE_HEADER_SIZE;
 
         foreach (TranslatedInstruction instruction in instructions)
-            offset += sizeof(byte) + ((ulong)instruction.Operands.Length * sizeof(ulong));
+            offset += sizeof(byte) + ((ulong)2 * sizeof(ulong));
 
         ulong symbolsOffset = 8 * (offset / 8 + 1);
 
@@ -163,8 +164,8 @@ internal class FinalizedTiPackageAssembly
         {
             if (i == 0) continue;
             offsets[i] = offsets[i - 1];
-            foreach (TranslatedInstruction instruction in @object.Instructions)
-                offsets[i] += 1 + ((ulong)instruction.Operands.Length * 8);
+            foreach (TranslatedInstruction _ in @object.Instructions)
+                offsets[i] += 1 + ((ulong)2 * 8);
         }
 
         return offsets;

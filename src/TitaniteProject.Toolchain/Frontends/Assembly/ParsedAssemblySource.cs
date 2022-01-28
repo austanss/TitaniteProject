@@ -93,7 +93,7 @@ internal record class ParsedAssemblySource : ParsedSource
                 else operands[i] = ulong.Parse(parameter);
             }
 
-            instructions.Add(new(opcode, operands));
+            instructions.Add(new(opcode, 0, new OperandPair(operands[0], operands[1])));
             offset += 1 + ((ulong)2 * 8);
         }
     }
@@ -103,7 +103,7 @@ internal record class ParsedAssemblySource : ParsedSource
         ulong offset = BackendData.PACKAGE_HEADER_SIZE;
 
         foreach (TranslatedInstruction instruction in Instructions)
-            offset += sizeof(byte) + ((ulong)instruction.Operands.Length * sizeof(ulong));
+            offset += sizeof(byte) + (2 * sizeof(ulong));
 
         ulong symbolsOffset = offset;
 
