@@ -14,6 +14,6 @@
 
   <Import Project="..\TitaniteProject.Example\TitaniteProject.Example.projitems" Label="Shared" />
 
-  <Import Project="..\..\TitaniteProject.Commons\TitaniteProject.Commons.projitems" Label="Shared" />
+  <Import Project="..\TitaniteProject.Commons\TitaniteProject.Commons.projitems" Label="Shared" />
 
 </Project>
