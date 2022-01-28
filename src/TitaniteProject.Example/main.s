@@ -1,6 +1,6 @@
 
 ;								   ;
-; "Greetings", v2.0.0.0 | austanss ;
+; "Greetings", v3.0.0.0 | austanss ;
 ;                                  ;
 
 ; This file is released to the public domain. ;
