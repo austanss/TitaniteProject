@@ -19,7 +19,7 @@ namespace TitaniteProject.Interface
             used = false;
         }
 
-        private Dictionary<string, string> configuration;
+        private Dictionary<string, string> configuration; 
         private bool used;
 
         private void LoadDefaultValues(ref Dictionary<string, string> config)
@@ -29,37 +29,20 @@ namespace TitaniteProject.Interface
 
             config.Clear();
 
-            config.Add("startup", "main.exe");
+            config.Add("startup", "main.tpk");
         }
 
-        public ProgramLoader LoadConfiguration(string cfgFilePath)
+        public ProgramLoader LoadFile(string filename)
         {
             if (used)
                 throw new NotSupportedException("The caller function attempted to reference a loader instance that has been used.");
 
             LoadDefaultValues(ref configuration);
 
-            FileStream cfg = File.OpenRead(cfgFilePath);
-
-            if (cfg == null)
-                throw new FileNotFoundException($"File \"{cfgFilePath}\" could not be loaded.");
-
-            StreamReader sr = new(cfg);
-            string[] modifiers = sr.ReadToEnd().Split("\n");
-            sr.Dispose();
-            cfg.Close();
-
-            foreach (string modifier in modifiers)
-            {
-                string[] keyValuePair = modifier.Split('=');
-
-                try { configuration[keyValuePair[0]] = keyValuePair[1].Replace("\r", "").Trim(); }
-                catch (KeyNotFoundException)
-                { throw new ArgumentOutOfRangeException($"The configuration file attempted to modify a value \"{keyValuePair[0]}\" that doesn't exist."); }
-            }
+            configuration["startup"] = filename;
 
             return this;
-        }
+        } 
 
         public ProgramPackage RetrieveProgram()
         {

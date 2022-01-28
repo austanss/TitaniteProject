@@ -16,15 +16,15 @@ namespace TitaniteProject.Interface
         {
             Console.WriteLine($"\t -- {VERSION_STRING} -- \n");
 
-            if (args.Length > 0)
+            if (args.Length != 1)
             {
-                Console.WriteLine("NOTICE: Arguments are to be implemented in phase Alpha.\n");
-                Console.WriteLine("Usage: texi .\n");
-                Console.WriteLine("Details: The current working directory should contain a valid 'texi.config' file.");
+                Console.WriteLine("NOTICE: Arguments are to be implemented in phase Alpha.\n\n");
+                Console.WriteLine("Usage: texi <executable>\n");
+                Console.WriteLine("Details: The file path should point to a Ti executable in a supported format.");
                 return;
             }
 
-            ProgramPackage program = new ProgramLoader().LoadConfiguration("texi.config").RetrieveProgram();
+            ProgramPackage program = new ProgramLoader().LoadFile(args[0]).RetrieveProgram();
 
             Console.WriteLine($"\nLoading program \"{program.Name}\" (version {program.Version})...\n\n\n");
 
