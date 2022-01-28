@@ -8,20 +8,24 @@ namespace TitaniteProject.Execution.IO
     {
         public IOManager(in ExecutionInstance instance)
         {
-            ctx = instance;
-            ctx.ThreadContext.Declare("stdout");
-            ctx.ThreadContext["stdout"] = ulong.MaxValue;
+            _ctx = instance;
+            _plugins = new List<IOManagerPlugin>()
+            {
+                new StdoutPlugin()
+            };
+
+            foreach (IOManagerPlugin plugin in _plugins)
+                plugin.Initialize(_ctx);
         }
 
-        private readonly ExecutionInstance ctx;
+        private readonly List<IOManagerPlugin> _plugins;
+
+        private readonly ExecutionInstance _ctx;
 
         public void Check()
         {
-            if (ctx.ThreadContext["stdout"] != ulong.MaxValue)
-            {
-                ctx.Stdout(ctx.Strings[ctx.ThreadContext["stdout"]]);
-                ctx.ThreadContext["stdout"] = ulong.MaxValue;
-            }
+            foreach (IOManagerPlugin plugin in _plugins)
+                plugin.Check(_ctx);
         }
     }
 }
